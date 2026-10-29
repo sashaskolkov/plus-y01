@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Плюс × Я01">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Яндекс Плюс × Яндекс 01 — прототип</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <link rel="preconnect" href="https://yastatic.net" crossorigin>
+  <link rel="stylesheet" href="css/base.css?v=3">
+  <link rel="stylesheet" href="css/plus.css?v=3">
+  <link rel="stylesheet" href="css/y01.css?v=3">
+  <link rel="stylesheet" href="css/demo.css?v=3">
+</head>
+<body>
+  <div id="stage">
+    <div id="phone">
+      <div id="screen">
+        <div id="statusbar"><span class="sb-time"></span><span class="sb-island"></span><span class="sb-icons"><i class="sig"></i><i class="wifi"></i><i class="bat"></i></span></div>
+
+        <!-- Яндекс Плюс -->
+        <div id="plus">
+          <div class="page" data-page="home"></div>
+          <div class="page" data-page="kp"></div>
+          <div class="page" data-page="music"></div>
+          <div class="page" data-page="books"></div>
+          <div class="page" data-page="profile"></div>
+          <div id="miniplayer"></div>
+          <nav id="tabbar"></nav>
+        </div>
+
+        <!-- Мини-апп Яндекс 01 внутри Плюса -->
+        <div id="y01" aria-hidden="true">
+          <header class="y01-head"></header>
+          <div class="y01-body">
+            <section class="y01-screen" data-screen="today"></section>
+            <section class="y01-screen" data-screen="lumen"></section>
+            <section class="y01-screen" data-screen="map"></section>
+            <section class="y01-screen" data-screen="visit"></section>
+          </div>
+          <nav class="y01-nav"></nav>
+        </div>
+
+        <div id="scene"></div>
+        <div id="sheet"></div>
+        <div id="lock"></div>
+        <div id="pushes"></div>
+        <div id="toast"></div>
+        <div id="story"></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <aside id="guide"></aside>
+  </div>
+
+  <script src="js/data.js?v=3"></script>
+  <script src="js/art.js?v=3"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/ui.js?v=3"></script>
+  <script src="js/plus.js?v=3"></script>
+  <script src="js/y01.js?v=3"></script>
+  <script src="js/lumen.js?v=3"></script>
+  <script src="js/demo.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.DS_Store
+_research/
+_tools/
+node_modules/
+.claude/
