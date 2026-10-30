@@ -335,3 +335,28 @@
 
 .cam.inapp .cam-close { position: absolute; left: 16px; top: calc(var(--sat) + 10px); z-index: 2; }
 .cam.inapp .cam-where { top: calc(var(--sat) + 20px); }
+
+/* Что происходит: дни и календарь */
+.day-head { margin: 28px 16px 12px; }
+.day-head h3 { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -.3px; margin: 0 0 10px; }
+.day-nav { display: flex; align-items: center; gap: 6px; }
+.dn-arrow, .dn-cal { width: 38px; height: 38px; border-radius: 50%; background: var(--card2); display: flex; align-items: center; justify-content: center; flex: none; }
+.dn-arrow .ic, .dn-cal .ic { width: 18px; height: 18px; }
+.dn-date { flex: 1; height: 38px; border-radius: 19px; background: var(--card); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 15px; }
+.dn-cal { margin-left: 4px; background: var(--y-red); }
+.ev-empty { display: flex; gap: 12px; align-items: center; padding: 16px; border-radius: 20px; background: var(--card); color: var(--t2); font-size: 14px; line-height: 1.4; }
+.ev-empty .ic { flex: none; opacity: .6; }
+.cal-top { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 12px; }
+.cal-top b { font-family: var(--display); font-size: 18px; }
+.cal-wd, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-wd span { font-size: 12px; color: var(--t3); padding-bottom: 6px; }
+.cal-d { position: relative; height: 42px; border-radius: 12px; font-size: 15px; color: var(--t2); }
+.cal-d.has { color: #fff; font-weight: 500; background: rgba(255,255,255,.06); }
+.cal-d em { position: absolute; left: 50%; bottom: 5px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--y-red); }
+.cal-d.today { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); }
+.cal-d.sel { background: #fff; color: #000; font-weight: 700; }
+.cal-d.sel em { background: var(--y-red); }
+.cal-legend { display: flex; gap: 16px; justify-content: center; margin: 14px 0; font-size: 12px; color: var(--t2); }
+.cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.cal-legend em { width: 6px; height: 6px; border-radius: 50%; background: var(--y-red); }
+.cal-legend i.t { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); }

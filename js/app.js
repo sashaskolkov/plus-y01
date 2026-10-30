@@ -48,7 +48,7 @@
     const linked = handleLink();
     if (!DEMO && !S.get().welcomed) S.reset('plus', '');
     // Приложение всегда открывается на Главной Плюса
-    if (!DEMO && !linked) S.set((x) => { x.tab = 'home'; x.y01.open = false; x.y01.screen = 'today'; });
+    if (!DEMO && !linked) S.set((x) => { x.tab = 'home'; x.y01.open = false; x.y01.screen = 'today'; x.y01.date = '2026-11-28'; });
     renderAll();
     Lumen.boot();
     Meidzi.boot();

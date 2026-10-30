@@ -41,16 +41,53 @@
     const s = S.get();
     const reg = s.visit.regs.includes(e.id);
     const c = ZC(e.zone, e.floor);
-    return `<div class="ev" style="--c:${c}"><div class="time"><b>${e.time.length > 5 ? '' : e.time}</b><small>${e.time.length > 5 ? e.time : (e.short || `${e.floor} этаж`)}</small></div><i class="bar"></i>
+    return `<div class="ev" style="--c:${c}"><div class="time"><b>${e.time.length > 5 ? '' : e.time}</b><small>${e.time.length > 5 ? e.time : (opts.agenda ? `${e.floor} этаж` : (e.short || `${e.floor} этаж`))}</small></div><i class="bar"></i>
       <div class="info"><b>${esc(e.title)}</b><small>${esc(e.kind)} · ${esc(e.place)}</small>${e.plus ? `<span class="badge-plus">${A.plusMark(16)} ${esc(e.perk)}</span>` : e.seats ? `<small style="color:var(--y-yellow)">${esc(e.seats)}</small>` : ''}</div>
       ${opts.noAct || e.time.length > 5 ? '' : `<div class="act">${reg ? `<button class="pill done" data-act="openTicket" data-arg="${e.id}">${I.check} Вы идёте</button>` : `<button class="pill" data-act="regEvent" data-arg="${e.id}">Записаться</button>`}</div>`}
     </div>`;
   }
 
+  // ---------- Что происходит: листалка по дням и календарь ----------
+  const WD = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+  const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  const MONTHS1 = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  const toISO = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const fromISO = (iso) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+  const dayLabel = (iso) => { const d = fromISO(iso); return `${d.getDate()} ${MONTHS[d.getMonth()]}, ${WD[d.getDay()]}`; };
+  const curDate = () => S.get().y01.date || '2026-11-28';
+  function agendaHTML() {
+    const iso = curDate(); const ids = D.agenda[iso] || [];
+    return `<div class="day-head"><h3>Что происходит</h3>
+        <div class="day-nav"><button class="dn-arrow" data-act="dayShift" data-arg="-1">${I.back}</button><span class="dn-date">${dayLabel(iso)}</span><button class="dn-arrow" data-act="dayShift" data-arg="1">${I.chevron}</button><button class="dn-cal" data-act="openCal">${I.calendar}</button></div></div>
+      <div class="ev-list">${ids.length ? ids.map((k) => eventRow(D.events[k], { agenda: true })).join('') : `<div class="ev-empty">${I.calendar}<span>Афиша на этот день ещё собирается. Загляните ближе к дате — или спросите Люмена, что будет.</span></div>`}</div>`;
+  }
+  acts.dayShift = (n) => { const d = fromISO(curDate()); d.setDate(d.getDate() + Number(n)); S.set((s) => { s.y01.date = toISO(d); }); renderToday(); };
+  let calMonth = null;
+  function calHTML() {
+    const sel = curDate(); const base = calMonth || fromISO(sel);
+    const y = base.getFullYear(), m = base.getMonth();
+    const first = new Date(y, m, 1); const shift = (first.getDay() + 6) % 7; const days = new Date(y, m + 1, 0).getDate();
+    const today = '2026-11-26';
+    let cells = '';
+    for (let i = 0; i < shift; i++) cells += '<i></i>';
+    for (let d = 1; d <= days; d++) {
+      const iso = toISO(new Date(y, m, d)); const has = (D.agenda[iso] || []).length;
+      cells += `<button class="cal-d ${iso === sel ? 'sel' : ''} ${iso === today ? 'today' : ''} ${has ? 'has' : ''}" data-act="pickDay" data-arg="${iso}">${d}${has ? '<em></em>' : ''}</button>`;
+    }
+    return `<div class="cal">
+      <div class="cal-top"><button class="roundbtn" data-act="calMonth" data-arg="-1">${I.back}</button><b>${MONTHS1[m]} ${y}</b><button class="roundbtn" data-act="calMonth" data-arg="1">${I.chevron}</button></div>
+      <div class="cal-wd">${['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((w) => `<span>${w}</span>`).join('')}</div>
+      <div class="cal-grid">${cells}</div>
+      <div class="cal-legend"><span><em></em> Есть события</span><span><i class="t"></i> Сегодня</span></div>
+      <button class="btn block" data-act="pickDay" data-arg="${sel}">Показать ${dayLabel(sel)}</button></div>`;
+  }
+  acts.openCal = () => { calMonth = null; UI.sheet(`<div class="sheet-h">Выберите дату</div>${calHTML()}`); };
+  acts.calMonth = (n) => { const b = calMonth || fromISO(curDate()); calMonth = new Date(b.getFullYear(), b.getMonth() + Number(n), 1); $('#sheet .cal').outerHTML = calHTML(); };
+  acts.pickDay = (iso) => { S.set((s) => { s.y01.date = iso; }); UI.closeSheet(); renderToday(); };
+
   function renderToday() {
     const s = S.get(); const u = s.user; const L = S.lumen();
     const inside = s.visit.inside && !s.visit.ended;
-    const day = s.clock.day.startsWith('Суббота') ? 'Сегодня' : 'В субботу, 28 ноября';
     let cta, h2, p;
     if (inside) {
       h2 = L ? `${esc(L.name)} рядом` : 'Вы в Яндекс 01';
@@ -61,7 +98,6 @@
       p = 'Персональный ИИ-компаньон составит вам компанию во время посещения пространства';
       cta = L ? `<button class="btn sm red" data-act="lumenPlanHome">Спланировать с ${esc(L.name)}</button>` : `<button class="btn sm red" data-act="y01nav" data-arg="lumen">Разбудить своего Люмена</button>`;
     }
-    const evs = ['robots', 'workshop', 'listen', 'author', 'premiere', 'expo'].map((k) => D.events[k]);
     $('#y01 [data-screen="today"]').innerHTML = `
       <div class="t-hero">
         <i class="t-cat"></i>
@@ -74,8 +110,7 @@
         ${[['Ф', 'Фабрика', '#0f2a24'], ['К', 'Кинопоиск', '#ff5500'], ['М', 'М.Кос', '#2a0f1a'], ['П', 'Свои Плюсы', '#3b1690']].map(([g, n, c]) => `<button class="res soon" data-act="toast" data-arg="Мини-апп «${n}» — в следующих итерациях"><span class="res-ic" style="background:${c}">${g}</span><span>${n}</span></button>`).join('')}
       </div>
       ${Guides.section()}
-      <div class="sec-title">${day} в Я01</div>
-      <div class="ev-list">${evs.map((e) => eventRow(e)).join('')}</div>
+      ${agendaHTML()}
       <div class="sec-title">Только для Плюса ${A.plusMark(20)}</div>
       <div class="perks">${D.perks.map((x) => `<div class="perk">${I[x.icon] || I.star}<b>${esc(x.title)}</b><small>${esc(x.sub)}</small></div>`).join('')}</div>
       ${u.hasPlus ? '' : `<div class="lock-note">${I.lockSmall} Откроется с подпиской Плюс — первый месяц бесплатно</div>`}
