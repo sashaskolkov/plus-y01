@@ -269,7 +269,6 @@
           return `<div class="gstop ${isDone ? 'done' : ''}">
             <div class="gs-head"><span class="gs-n">${i + 1}</span><span class="gs-kind" style="--k:${k.c}">${k.label}</span><span class="gs-where">${esc(st.where)} · ${st.floor} этаж</span></div>
             <h4>${esc(st.title)}</h4>
-            <span class="gs-label">${I.eye} Чего не написано на стенде</span>
             <p>${esc(st.story)}</p>
             <div class="gs-why">${I.sparkle}<span><b>Совет.</b> ${esc(st.why)}</span></div>
             <div class="gs-cta">${st.action ? `<button class="btn sm" data-act="${st.action.act}" data-arg="${esc(st.action.arg || '')}">${esc(st.action.label)}</button>` : ''}
