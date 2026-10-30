@@ -99,7 +99,7 @@
     switch (m.type) {
       case 'hero': {
         const L = S.lumen();
-        return `<div class="ccard hero-card"><div class="lumen-stage">${L ? A.lumen(L.id, 150, { sparks: true, idle: true }) : `<img class="cat-hero" src="assets/cats/${d.pose || 'wave'}.jpg" alt="">`}</div><h4>${esc(d.title)}</h4><p>${esc(d.text)}</p></div>`;
+        return `<div class="ccard hero-card"><div class="lumen-stage">${L ? A.lumen(L.id, 150, { sparks: true, idle: true }) : `<span style="padding:14px 0 6px;display:block">${UI.orb(128)}</span>`}</div><h4>${esc(d.title)}</h4><p>${esc(d.text)}</p></div>`;
       }
       case 'login':
         return `<div class="ccard ${done}"><h4>Вход через Яндекс ID</h4><p>Так Люмен запомнит вас, ваши планы и билеты. Ничего вводить не нужно — аккаунт уже есть на телефоне</p><div class="cta"><button class="btn sm light" ${ca('login')}>Войти с Яндекс ID</button></div></div>`;
@@ -283,8 +283,6 @@
       chips([{ label: 'Разбудить своего Люмена', go: 'onb.pick', main: true }, { label: 'Потом, дома', go: 'onb.later' }]);
     },
     async 'onb.pick'() {
-      card('hero', { title: 'Люмен просыпается…', text: 'Потягивается, зевает и уже готов гулять', pose: 'wake' });
-      await sleep(900);
       await say('Сначала выберите, кто будет с вами гулять');
       card('pick', {});
     },
@@ -577,7 +575,7 @@
       const s = st();
       if (s.visit.inside && !s.visit.ended) return STEPS.arrive();
       if (s.user.lumen) return STEPS['lp.start']();
-      card('hero', { title: 'Привет! Я Люмен', text: 'ИИ-компаньон Плюса. В Яндекс 01 гуляю рядом с вами: план, события, кофе без очереди', pose: 'sit' });
+      card('hero', { title: 'Привет! Я Люмен', text: 'ИИ-компаньон Плюса. В Яндекс 01 гуляю рядом с вами: план, события, кофе без очереди' });
       await say('Разбудить своего Люмена можно в Яндекс 01 — отсканируйте QR у эскалатора. А пока могу рассказать, что там идёт');
       chips([{ label: 'Что идёт в субботу?', go: 'next.events', main: true }]);
     },

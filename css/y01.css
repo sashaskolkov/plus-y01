@@ -320,7 +320,7 @@
 .t-hero h2 { font-size: 19px; line-height: 1.08; margin: 0; letter-spacing: -.2px; max-width: none; }
 .t-hero p { font-size: 12.5px; line-height: 1.3; max-width: none; color: rgba(255,255,255,.75); }
 .t-hero .btn { margin-top: 4px; }
-.t-cat { position: absolute; right: -6px; top: 0; bottom: 0; width: 48%; background: url(../assets/cats/portrait.jpg) center 22% / cover no-repeat;
+.t-cat { position: absolute; right: -6px; top: 0; bottom: 0; width: 48%; background: url(../assets/lumen-cat.jpg) center 18% / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 35%, #000 82%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 35%, #000 82%, transparent 100%); }
 /* Резиденты */
 .residents { display: flex; gap: 14px; overflow-x: auto; padding: 0 16px; scrollbar-width: none; }

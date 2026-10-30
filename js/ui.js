@@ -32,7 +32,7 @@
   const appName = { plus: 'Яндекс Плюс', go: 'Яндекс Go', ya: 'Яндекс', lumen: 'Люмен · Яндекс Плюс', y01: 'Яндекс 01', meidzi: 'Meidzi · Яндекс 01', smysl: 'Смысловая 226 · Яндекс 01' };
   // Кот-Люмен вместо кружка, пока свой Люмен ещё не разбужен
   function orb(size = 30) {
-    return `<span class="orb cat" style="--s:${size}px"><img src="assets/cats/face.jpg" alt="Люмен"></span>`;
+    return `<span class="orb cat" style="--s:${size}px"><img src="assets/lumen-cat-face.jpg" alt="Люмен"></span>`;
   }
 
 

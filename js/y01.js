@@ -122,7 +122,7 @@
     const tickets = v.regs.map((id) => D.events[id]).filter(Boolean);
     const hasAny = v.plan || v.log.length || tickets.length || v.coffee;
     if (!hasAny) {
-      el.innerHTML = `<div class="empty">${L ? A.lumen(L.id, 96, { idle: true }) : '<img class="cat-empty" src="assets/cats/sleep.jpg" alt="">'}<p>Здесь будет ваш визит: план, билеты, кофе и история того, что было.</p><button class="btn" data-act="y01nav" data-arg="lumen">${L ? `Спланировать с ${esc(L.name)}` : 'Начать с Люменом'}</button></div><div class="sub-title">Редакционные путеводители</div><div class="gscroll">${Guides.GUIDES.map((g) => Guides.cover(g)).join('')}</div><div class="gexpo">${Guides.cover(Guides.EXPO, 'wide')}</div>`;
+      el.innerHTML = `<div class="empty">${L ? A.lumen(L.id, 96, { idle: true }) : UI.orb(64)}<p>Здесь будет ваш визит: план, билеты, кофе и история того, что было.</p><button class="btn" data-act="y01nav" data-arg="lumen">${L ? `Спланировать с ${esc(L.name)}` : 'Начать с Люменом'}</button></div><div class="sub-title">Редакционные путеводители</div><div class="gscroll">${Guides.GUIDES.map((g) => Guides.cover(g)).join('')}</div><div class="gexpo">${Guides.cover(Guides.EXPO, 'wide')}</div>`;
       return;
     }
     const wallet = [];

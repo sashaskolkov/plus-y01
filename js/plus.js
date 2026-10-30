@@ -45,7 +45,7 @@
         <div class="row1">${A.y01Logo(26)}<span class="kicker"><i class="live-dot"></i> Вы в Яндекс 01</span></div>
         <h3>${L ? `${esc(L.name)} рядом` : 'Люмен рядом'}</h3>
         <p>${s.visit.plan ? `Следующая точка плана: ${esc(nextPlanPoint() || 'смотрите план')}` : 'План, события и кофе без очереди'}</p>
-        ${L ? `<span class="lumen-peek">${A.lumen(L.id, 64, { idle: true })}</span>` : '<img class="lumen-peek cat-walk" src="assets/cats/walk.jpg" alt="">'}
+        ${L ? `<span class="lumen-peek">${A.lumen(L.id, 64, { idle: true })}</span>` : ''}
         <div class="row2"><span class="btn sm red">Открыть</span></div>
       </div>`;
     }
@@ -162,7 +162,7 @@
         <div class="pcard"><h5>Подписка</h5><small>${u.trial ? 'Пробный период до 28 декабря 2026' : 'Активна до 17 октября 2027'}</small><span class="pill">Преимущества</span></div>
         <div class="pcard"><h5>Семейная группа</h5><div class="fam"><i class="me">${initial()}</i><i>+</i><i>+</i><i>+</i></div></div>
         <div class="pcard" id="pointsCard"><h5>Баллы Плюса</h5><div class="big">${s.points.toLocaleString('ru-RU')} ${A.plusMark(20)}</div><small>1 балл = 1 рубль</small><span class="pill" data-act="openY01" data-arg="today">Как потратить</span></div>
-        <div class="pcard"><h5>Люмен</h5>${L ? `<div style="display:flex;align-items:center;gap:8px;margin-top:6px">${A.lumen(L.id, 48, { aura: false })}<b style="font-size:16px">${esc(L.name)}</b></div><small>Знает ${s.memory.length} фактов о вас</small>` : '<img class="cat-sleep" src="assets/cats/sleep.jpg" alt=""><small>Ещё спит. Разбудить своего Люмена можно в Яндекс 01</small>'}<span class="pill" data-act="openY01" data-arg="${L ? 'lumen' : 'today'}">${L ? 'Чат' : 'Разбудить'}</span></div>
+        <div class="pcard"><h5>Люмен</h5>${L ? `<div style="display:flex;align-items:center;gap:8px;margin-top:6px">${A.lumen(L.id, 48, { aura: false })}<b style="font-size:16px">${esc(L.name)}</b></div><small>Знает ${s.memory.length} фактов о вас</small>` : '<small>Ещё спит. Разбудить своего Люмена можно в Яндекс 01</small>'}<span class="pill" data-act="openY01" data-arg="${L ? 'lumen' : 'today'}">${L ? 'Чат' : 'Разбудить'}</span></div>
       </div>` : `
       <div class="noplus-card"><b>Попробуйте Плюс</b><p>Кино, музыка, книги и Люмен — первый месяц бесплатно</p><button class="btn light sm" data-act="toast" data-arg="В прототипе Плюс подключается в сценарии Я01">Подключить</button></div>`}
       <div class="plist">
