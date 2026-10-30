@@ -81,3 +81,7 @@
 .g-fine { font-size: 12px; color: var(--t3); line-height: 1.45; margin-top: 16px; }
 .guide-sheet .g-next { margin-top: 12px; }
 .guide-sheet .g-chapters { margin-top: 14px; }
+
+/* Демо-слой скрыт: только телефон по центру */
+body.no-demo #guide, body.no-demo #story { display: none !important; }
+body.no-demo #stage { gap: 0; }

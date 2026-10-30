@@ -24,7 +24,7 @@
   function handleLink() {
     const q = new URLSearchParams(location.search);
     let handled = false;
-    if (q.get('reset') !== null) { localStorage.clear(); }
+    if (q.get('reset') !== null) { localStorage.clear(); S.reset('plus', ''); }
     if (q.get('persona')) {
       S.reset(q.get('persona'), q.get('name') || '');
       handled = true;
@@ -39,17 +39,27 @@
     return handled;
   }
 
+  // Демо-слой (приветствие, стартовые сцены, пульт сюжета, кнопка «Дальше») пока скрыт.
+  // Вернуть: открыть ссылку с ?demo
+  const DEMO = new URLSearchParams(location.search).has('demo');
+
   function boot() {
+    document.body.classList.toggle('no-demo', !DEMO);
     const linked = handleLink();
+    if (!DEMO && !S.get().welcomed) S.reset('plus', '');
+    // Приложение всегда открывается на Главной Плюса
+    if (!DEMO && !linked) S.set((x) => { x.tab = 'home'; x.y01.open = false; x.y01.screen = 'today'; });
     renderAll();
     Lumen.boot();
     Meidzi.boot();
     Smysl.boot();
-    if (!S.get().welcomed && !linked) Demo.welcome();
-    else if (linked && S.get().beats && !S.get().beats.home && !S.get().beats.arrive) setTimeout(() => Demo.runBeat('home'), 600);
+    if (DEMO) {
+      if (!S.get().welcomed && !linked) Demo.welcome();
+      else if (linked && S.get().beats && !S.get().beats.home && !S.get().beats.arrive) setTimeout(() => Demo.runBeat('home'), 600);
+    }
     Demo.render();
   }
 
-  window.App = { renderAll };
+  window.App = { renderAll, DEMO };
   document.addEventListener('DOMContentLoaded', boot);
 })();
