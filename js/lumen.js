@@ -67,8 +67,8 @@
   function idleChips() {
     const s = st();
     if (s.visit.ended) return [{ label: 'Что будет в Я01 дальше?', go: 'next.events' }];
-    if (s.visit.inside) return [{ label: 'Чем заняться сейчас?', go: 'now' }, { label: '📷 Отложить вещь', go: 'cam' }, { label: 'Покажи план', go: 'showplan' }, { label: 'Где кофе?', go: 'coffee.where' }];
-    return [{ label: 'Что идёт в субботу?', go: 'next.events' }, ...(s.user.lumen ? [{ label: 'Составь план на субботу', go: 'lp.when' }] : [])];
+    if (s.visit.inside) return [{ label: 'Чем заняться сейчас?', go: 'now' }, { label: '📷 Отложить вещь', go: 'cam' }, { label: 'Мой план', go: 'showplan' }, { label: 'Где кофе?', go: 'coffee.where' }];
+    return [{ label: 'Что идёт в субботу?', go: 'next.events' }, ...(s.user.lumen ? [{ label: 'План на субботу', go: 'lp.when' }] : [])];
   }
 
   // ---------- Запуск шагов ----------
@@ -99,33 +99,33 @@
     switch (m.type) {
       case 'hero': {
         const L = S.lumen();
-        return `<div class="ccard hero-card"><div class="lumen-stage">${L ? A.lumen(L.id, 150, { sparks: true, idle: true }) : `<span style="padding:30px 0;display:block">${UI.orb(90)}</span>`}</div><h4>${esc(d.title)}</h4><p>${esc(d.text)}</p></div>`;
+        return `<div class="ccard hero-card"><div class="lumen-stage">${L ? A.lumen(L.id, 150, { sparks: true, idle: true }) : `<img class="cat-hero" src="assets/cats/${d.pose || 'wave'}.jpg" alt="">`}</div><h4>${esc(d.title)}</h4><p>${esc(d.text)}</p></div>`;
       }
       case 'login':
-        return `<div class="ccard ${done}"><h4>Вход через Яндекс ID</h4><p>Так Люмен запомнит тебя, планы и билеты. Ничего вводить не нужно — аккаунт уже есть на телефоне</p><div class="cta"><button class="btn sm light" ${ca('login')}>Войти с Яндекс ID</button></div></div>`;
+        return `<div class="ccard ${done}"><h4>Вход через Яндекс ID</h4><p>Так Люмен запомнит вас, ваши планы и билеты. Ничего вводить не нужно — аккаунт уже есть на телефоне</p><div class="cta"><button class="btn sm light" ${ca('login')}>Войти с Яндекс ID</button></div></div>`;
       case 'trial':
         return `<div class="ccard trial ${done}"><div class="row">${A.plusMark(32)}<div><h4 style="margin:0">Плюс на 30 дней бесплатно</h4><p style="color:rgba(255,255,255,.8)">Отменить можно в пару касаний</p></div></div>
-          <ul><li>Люмен — гуляет с тобой по Я01 и помнит вкусы</li><li>Кофе в подарок при первом визите</li><li>Предпоказы Кинопоиска и закрытые события</li><li>Кино, музыка и книги в одном приложении</li></ul>
+          <ul><li>Люмен — гуляет с вами по Я01 и помнит вкусы</li><li>Кофе в подарок при первом визите</li><li>Предпоказы Кинопоиска и закрытые события</li><li>Кино, музыка и книги в одном приложении</li></ul>
           <div class="cta"><button class="btn sm light" ${ca('trialYes')}>Попробовать бесплатно</button><button class="btn sm ghost" ${ca('trialNo')}>Не сейчас</button></div></div>`;
       case 'pick':
-        return `<div class="ccard ${done}"><h4>Кто будет с тобой ходить?</h4><p>У каждого Люмена свой характер. Поменять можно в любой момент</p>
+        return `<div class="ccard ${done}"><h4>Кто будет с вами гулять?</h4><p>У каждого Люмена свой характер. Поменять можно в любой момент</p>
           <div class="lpick">${D.lumens.map((l) => `<div class="lp ${d.sel === l.id ? 'sel' : ''}">${A.lumen(l.id, 120, { idle: true })}<b>${esc(l.name)}</b><small>${esc(l.trait)}</small><button class="btn sm ${d.sel === l.id ? 'light' : 'ghost'}" ${ca('pick', l.id)}>${d.sel === l.id ? 'Выбран' : 'Выбрать'}</button></div>`).join('')}</div></div>`;
       case 'interests': {
         const sel = new Set(d.sel || []);
-        return `<div class="ccard ${done}"><h4>Что тебе интересно?</h4><p>${d.pre && d.pre.length ? 'Отметил то, что знаю из Плюса. Добавь своё' : 'Выбери пару тем — подберу события и места'}</p>
+        return `<div class="ccard ${done}"><h4>Что вам интересно?</h4><p>${d.pre && d.pre.length ? 'Отметил то, что знаю из Плюса. Добавьте своё' : 'Выберите пару тем — подберу события и места'}</p>
           <div class="tags">${D.interests.map((x) => `<button class="tag ${sel.has(x) ? 'on' : ''}" ${ca('tag', x)}>${sel.has(x) ? I.check : ''}${esc(x)}</button>`).join('')}</div>
           <div class="cta"><button class="btn sm" ${ca('tagsDone')}>Готово</button></div></div>`;
       }
       case 'coffee': {
         const gift = d.mode === 'gift';
-        return `<div class="ccard ${done}"><h4>${gift ? 'Кофе в подарок от Плюса' : 'Кофе, пока поднимаешься?'}</h4><p>${gift ? 'Выбери напиток — начнут готовить сразу, заберёшь без очереди' : `Оплачу баллами Плюса — у тебя ${s.points.toLocaleString('ru-RU')}`}</p>
+        return `<div class="ccard ${done}"><h4>${gift ? 'Кофе в подарок от Плюса' : 'Кофе, пока поднимаетесь?'}</h4><p>${gift ? 'Выберите напиток — начнут готовить сразу, заберёте без очереди' : `Оплачу баллами Плюса — у вас ${s.points.toLocaleString('ru-RU')}`}</p>
           <div class="drinks">${D.drinks.map((x) => `<button class="drink" ${ca('drink', x.id)} style="--c:${x.color}"><span class="cup"></span><b>${esc(x.name)}</b><small>${esc(x.place)}</small><span class="price">${gift ? `<s>${x.price} ₽</s><em>0 ₽</em>` : `${x.price} баллов`}</span></button>`).join('')}</div>
           ${gift ? '' : `<div class="cta"><button class="btn sm ghost" ${ca('noCoffee')}>Без кофе</button></div>`}</div>`;
       }
       case 'voucher': {
         const v = s.visit.coffee; if (!v) return '';
         const dr = D.drinks.find((x) => x.id === v.drink);
-        const stt = v.status === 'cooking' ? `<span class="vstatus"><span class="spin"></span>Готовится · ~3 мин</span>` : v.status === 'ready' ? `<span class="vstatus ready">${I.check.replace('class="ic"', 'class="ic" style="width:15px;height:15px"')} Готов — забери на стойке</span>` : `<span class="vstatus ready">Получен</span>`;
+        const stt = v.status === 'cooking' ? `<span class="vstatus"><span class="spin"></span>Готовится · ~3 мин</span>` : v.status === 'ready' ? `<span class="vstatus ready">${I.check.replace('class="ic"', 'class="ic" style="width:15px;height:15px"')} Готов — можно забирать на стойке</span>` : `<span class="vstatus ready">Получен</span>`;
         return `<div class="ccard"><div class="voucher">${A.qr('coffee' + v.drink, 92)}<div><h4>${esc(dr.name)}</h4><p>${esc(dr.place)}, 3 этаж · ${v.paid === 'gift' ? 'подарок Плюса' : `${v.price} баллов`}</p>${stt}</div></div></div>`;
       }
       case 'plan': {
@@ -147,7 +147,7 @@
         return `<div class="ccard"><div class="product"><div class="shot" style="--g1:${p.g[0]};--g2:${p.g[1]}"></div><div><b>${esc(p.title)}</b><small>${esc(p.brand)}</small><div class="price">${esc(p.price)}</div><span class="mk">${I.heartFill.replace('class="ic"', 'class="ic" style="width:15px;height:15px"')} В избранном на Маркете</span></div></div></div>`;
       }
       case 'reward':
-        return `<div class="ccard reward"><div class="num">+${d.n} ${A.plusMark(34)}</div><p>баллов Плюса за рассказ о визите. Теперь у тебя ${s.points.toLocaleString('ru-RU')}</p></div>`;
+        return `<div class="ccard reward"><div class="num">+${d.n} ${A.plusMark(34)}</div><p>баллов Плюса за рассказ о визите. Теперь у вас ${s.points.toLocaleString('ru-RU')}</p></div>`;
       case 'recs':
         return `<div class="ccard"><h4>Чтобы суббота продолжилась</h4><div class="recs">
           <button class="rec" data-act="recBook">${A.bookCover(D.recs.book)}<b>${esc(D.recs.book.title)}</b><small>${esc(D.recs.book.why)}</small><span class="go">Читать в Книгах ${I.chevron}</span></button>
@@ -175,7 +175,7 @@
     trialNo: (m) => { finish(m); choose('Не сейчас', 'onb.noplus'); },
     pick: (m, id) => { m.data.sel = id; finish(m); const L = D.lumens.find((l) => l.id === id); choose(`Мне нравится ${L.name}`, 'onb.picked', id); },
     tag: (m, x) => { const sel = new Set(m.data.sel || []); sel.has(x) ? sel.delete(x) : sel.add(x); m.data.sel = [...sel]; S.save(); rerenderCard(m); },
-    tagsDone: (m) => { const sel = m.data.sel || []; if (!sel.length) { UI.toast('Выбери хотя бы одну тему'); return; } finish(m); choose(sel.join(', '), 'onb.interests', sel); },
+    tagsDone: (m) => { const sel = m.data.sel || []; if (!sel.length) { UI.toast('Выберите хотя бы одну тему'); return; } finish(m); choose(sel.join(', '), 'onb.interests', sel); },
     drink: (m, id) => { finish(m); const dr = D.drinks.find((x) => x.id === id); choose(dr.name, 'coffee.order', { id, mode: m.data.mode }); },
     noCoffee: (m) => { finish(m); choose('Без кофе', 'coffee.skip'); },
     route: (m, id) => { finish(m); const r = D.routes.find((x) => x.id === id); choose(r.title, 'plan.route', id); },
@@ -203,7 +203,7 @@
     };
   }
   function camera() {
-    UI.sheet(`<div class="sheet-h">Сфотографируй вещь</div><p class="sheet-p">Люмен узнает её и отложит в избранное на Маркете</p>
+    UI.sheet(`<div class="sheet-h">Сфотографируйте вещь</div><p class="sheet-p">Люмен узнает её и отложит в избранное на Маркете</p>
       <div class="pickshots">${D.shots.fabrika.map((p) => `<button data-act="shot" data-arg="${p.id}"><div class="shot" style="--g1:${p.g[0]};--g2:${p.g[1]}"><span>${esc(p.title)}</span></div><b>${esc(p.title)}</b></button>`).join('')}</div>`);
   }
   acts.shot = (id) => {
@@ -212,7 +212,7 @@
     setTimeout(() => { add({ k: 'photo', title: p.title, g: p.g }); scrollDown(); run('fab.got', id); }, 300);
   };
   function memories() {
-    UI.sheet(`<div class="sheet-h">Фото из Яндекс 01</div><p class="sheet-p">Выбери кадр из галереи</p>
+    UI.sheet(`<div class="sheet-h">Фото из Яндекс 01</div><p class="sheet-p">Выберите кадр из галереи</p>
       <div class="pickshots">${D.shots.memories.map((p) => `<button data-act="memshot" data-arg="${p.id}"><div class="shot" style="--g1:${p.g[0]};--g2:${p.g[1]}"><span>${esc(p.title)}</span></div><b>${esc(p.title)}</b></button>`).join('')}</div>`);
   }
   acts.memshot = (id) => {
@@ -253,11 +253,11 @@
       S.set((x) => { x.visit.inside = true; x.visit.ended = false; x.visit.where = 'atrium'; x.scene = 'inside'; });
       Y01.render();
       sys(`${s.clock.day} · ${s.clock.time} · Яндекс 01, эскалатор`);
-      if (already && chat().messages.length > 2) { await say('Мы уже гуляем вместе 🙂 Отметил точку в истории визита'); S.log('Отсканировал QR у эскалатора', 'qr'); idle(); return; }
-      S.log('Пришёл в Яндекс 01 — QR у эскалатора', 'qr');
+      if (already && chat().messages.length > 2) { await say('Мы уже гуляем вместе 🙂 Отметил точку в истории визита'); S.log('Скан QR у эскалатора', 'qr'); idle(); return; }
+      S.log('Вход в Яндекс 01 — QR у эскалатора', 'qr');
       if (!s.user.loggedIn) {
         await say(`Привет! Я Люмен из Яндекс Плюса 👋`);
-        await say('Чтобы я запомнил тебя и помогал во время визита — войди через Яндекс ID. Это пара секунд');
+        await say('Чтобы я запомнил вас и помогал во время визита — войдите через Яндекс ID. Это пара секунд');
         card('login');
         return;
       }
@@ -265,25 +265,27 @@
       return STEPS['onb.hello']();
     },
     async 'arrive.after'() {
-      S.log('Вошёл в Яндекс ID', 'check');
+      S.log('Вход в Яндекс ID', 'check');
       return STEPS['onb.hello']();
     },
 
     // Онбординг Люмена
     async 'onb.hello'() {
       const s = st();
-      card('hero', { title: 'Привет! Я Люмен', text: 'Твой спутник по Яндекс 01: план, события и кофе без очереди' });
-      await say(`Вижу, ты поднимаешься к нам на третий этаж${name()} 👋`, 300);
+      card('hero', { title: 'Привет! Я Люмен', text: 'Ваш спутник по Яндекс 01: план, события и кофе без очереди' });
+      await say(`Вижу, вы поднимаетесь к нам на третий этаж${name()} 👋`, 300);
       if (!s.user.hasPlus) {
         await say('Я часть Плюса. Подключим? Первый месяц бесплатно, а в конце знакомства — кофе в подарок ☕️');
         card('trial');
         return;
       }
-      await say('Знакомство займёт минуту, а в конце — **кофе в подарок от Плюса** ☕️');
-      chips([{ label: 'Давай знакомиться', go: 'onb.pick', main: true }, { label: 'Потом, дома', go: 'onb.later' }]);
+      await say('Разбудить своего Люмена — это минута, а в конце — **кофе в подарок от Плюса** ☕️');
+      chips([{ label: 'Разбудить своего Люмена', go: 'onb.pick', main: true }, { label: 'Потом, дома', go: 'onb.later' }]);
     },
     async 'onb.pick'() {
-      await say('Сначала выбери, кто будет с тобой ходить');
+      card('hero', { title: 'Люмен просыпается…', text: 'Потягивается, зевает и уже готов гулять', pose: 'wake' });
+      await sleep(900);
+      await say('Сначала выберите, кто будет с вами гулять');
       card('pick', {});
     },
     async 'onb.picked'(id) {
@@ -292,7 +294,7 @@
       Y01.render();
       await sleep(300);
       card('hero', { title: `Привет, это ${Lm.name}!`, text: Lm.trait });
-      await say(`Теперь мы вместе 🙂 Я уже кое-что знаю о тебе из Плюса: ты смотришь фантастику и слушаешь инди`, 300);
+      await say(`Теперь мы вместе 🙂 Я уже кое-что знаю о вас из Плюса: вы смотрите фантастику и слушаете инди`, 300);
       card('interests', { pre: ['Кино', 'Музыка'], sel: ['Кино', 'Музыка'] });
     },
     async 'onb.interests'(sel) {
@@ -302,18 +304,18 @@
       const atHome = !st().visit.inside || st().visit.ended;
       if (atHome) {
         S.set((s) => { s.flags.coffeeSaved = true; s.flags.onbHome = false; });
-        await say('Запомнил! Знакомство закончено 🎉 Кофе в подарок сохранил — заберёшь в следующий визит в Я01, код будет здесь ☕️');
-        await say(`А 5 декабря в Я01 лекция «${D.events.next.title}» — по твоим интересам. Записать?`);
+        await say('Запомнил! Знакомство закончено 🎉 Кофе в подарок сохранил — заберёте в следующий визит в Я01, код будет здесь ☕️');
+        await say(`А 5 декабря в Я01 лекция «${D.events.next.title}» — по вашим интересам. Записать?`);
         chips([{ label: 'Записать', go: 'eve.reg', main: true }, { label: 'Не сейчас', go: 'eve.end' }]);
         return;
       }
-      S.log('Познакомился с Люменом', 'sparkle');
-      await say('Запомнил. Знакомство закончено — держи подарок от Плюса 🎁');
+      S.log('Знакомство с Люменом', 'sparkle');
+      await say('Запомнил. Знакомство закончено — держите подарок от Плюса 🎁');
       card('coffee', { mode: 'gift' });
     },
     async 'onb.later'() {
       S.set((s) => { s.flags.onbHome = true; });
-      await say('Договорились! Вечером напомню — познакомимся дома. Кофе в подарок подождёт до следующего визита ☕️');
+      await say('Договорились! Вечером напомню — разбудим вашего Люмена дома. Кофе в подарок подождёт до следующего визита ☕️');
       await say('А пока я и так рядом: подскажу, что идёт, и покажу карту');
       card('events', { ids: ['robots', 'listen', 'author', 'premiere'], title: 'Сегодня в Я01' });
       idle();
@@ -322,7 +324,7 @@
       S.set((s) => { s.flags.onbHome = true; s.flags.noPlusDeclined = true; });
       await say('Понял, не настаиваю. Яндекс 01 открыт для всех — вот что идёт сегодня');
       card('events', { ids: ['robots', 'workshop', 'author', 'expo'], title: 'Сегодня в Я01' });
-      await say('Если передумаешь — Плюс можно подключить в любой момент, кофе будет ждать');
+      await say('Если передумаете — Плюс можно подключить в любой момент, кофе будет ждать');
       idle();
     },
 
@@ -333,10 +335,10 @@
         s.visit.coffee = { drink: id, status: 'cooking', paid: mode === 'gift' ? 'gift' : 'points', price: dr.price, at: Date.now() };
         if (mode !== 'gift') s.points -= dr.price;
       });
-      S.log(mode === 'gift' ? `Заказал ${dr.name.toLowerCase()} — подарок Плюса` : `Заказал ${dr.name.toLowerCase()}, оплатил баллами`, 'coffee');
+      S.log(mode === 'gift' ? `Заказ: ${dr.name.toLowerCase()} — подарок Плюса` : `Заказ: ${dr.name.toLowerCase()}, оплата баллами`, 'coffee');
       Plus.renderProfile();
       scheduleCoffee();
-      await say(`Заказал в «${dr.place.replace(/.*«(.+)».*/, '$1')}». Пока ты поднимаешься, его уже готовят — покажи этот код на стойке`);
+      await say(`Заказал в «${dr.place.replace(/.*«(.+)».*/, '$1')}». Пока вы поднимаетесь, его уже готовят — покажите этот код на стойке`);
       card('voucher');
       if (st().visit.plan) {
         const p = st().visit.plan; const first = p.items.find((i) => i.id !== 'coffee') || p.items[0];
@@ -353,7 +355,7 @@
     },
     async 'coffee.where'() {
       const v = st().visit.coffee;
-      if (v && v.status !== 'taken') { await say(v.status === 'ready' ? 'Твой кофе уже ждёт на стойке «Лицея» — это в Смысловой 226, в конце этажа слева' : 'Готовится! Пришлю пуш, как только будет готов'); card('voucher'); idle(); return; }
+      if (v && v.status !== 'taken') { await say(v.status === 'ready' ? 'Ваш кофе уже ждёт на стойке «Лицея» — это в Смысловой 226, в конце этажа слева' : 'Готовится! Пришлю пуш, как только будет готов'); card('voucher'); idle(); return; }
       await say('Ближайший кофе — кафе «Лицей» в Смысловой 226 и чайная Meidzi рядом. Заказать, чтобы забрать без очереди?');
       card('coffee', { mode: st().user.hasPlus && !v ? 'gift' : 'points' });
     },
@@ -364,7 +366,7 @@
       chips(D.moods.map((m) => ({ label: `${m.emoji} ${m.label}`, go: 'plan.build', arg: m.id })));
     },
     async 'plan.build'(mood) {
-      await think(['Смотрю, что сейчас идёт в Я01', 'Проверяю свободные места', 'Учитываю твои интересы и кофе']);
+      await think(['Смотрю, что сейчас идёт в Я01', 'Проверяю свободные места', 'Учитываю ваши интересы и кофе']);
       const p = buildPlan(mood);
       S.set((s) => { s.visit.plan = p; });
       S.remember(`Сегодняшнее настроение: ${D.moods.find((m) => m.id === mood).label.toLowerCase()}`);
@@ -372,7 +374,7 @@
       card('plan');
       return STEPS['plan.offer']();
     },
-    async 'plan.routes'() { await say('Выбирай 👇'); card('routes'); },
+    async 'plan.routes'() { await say('Выбирайте 👇'); card('routes'); },
     async 'plan.route'(id) {
       await think(['Собираю маршрут', 'Проверяю, что открыто']);
       const p = buildPlan(id);
@@ -384,7 +386,7 @@
       const p = st().visit.plan;
       const e = p.main && D.events[p.main];
       if (e && !st().visit.regs.includes(e.id)) {
-        await say(`Главное в плане — **${e.title}** в ${e.time}. ${e.seats ? `${e.seats}.` : ''} Записать тебя?`);
+        await say(`Главное в плане — **${e.title}** в ${e.time}. ${e.seats ? `${e.seats}.` : ''} Записать вас?`);
         chips([{ label: 'Записать', go: 'reg', arg: e.id, main: true }, { label: 'Не надо', go: 'plan.go' }]);
         return;
       }
@@ -395,7 +397,7 @@
       if (e.plus && !st().user.hasPlus) { await say('Это событие — для подписчиков Плюса. Подключим пробный месяц?'); card('trial'); return; }
       S.set((s) => { if (!s.visit.regs.includes(id)) s.visit.regs.push(id); });
       S.log(`Люмен записал: ${e.title}`, 'ticket');
-      await say(`Готово! Ты в списке. Билет — здесь и в «Моём визите», напомню за 15 минут`);
+      await say(`Готово! Вы в списке. Билет — здесь и в «Моём визите», напомню за 15 минут`);
       card('ticket', { id });
       return STEPS['plan.go']();
     },
@@ -403,14 +405,14 @@
       const p = st().visit.plan;
       const first = p && (p.items.find((i) => i.id !== 'coffee') || p.items[0]);
       if (first) await say(`Начнём с первой точки? **${first.title}** — ${first.floor} этаж, ${first.where}`);
-      chips([{ label: 'Поехали!', go: 'plan.started', main: true }, { label: 'Покажи на карте', go: 'openMap' }]);
+      chips([{ label: 'Поехали!', go: 'plan.started', main: true }, { label: 'Показать на карте', go: 'openMap' }]);
     },
     async 'plan.started'() {
-      await say('Иду рядом 🙂 Если захочешь кофе, подсказку или отложить вещь — просто напиши или пришли фото');
+      await say('Иду рядом 🙂 Если захотите кофе, подсказку или отложить вещь — просто напишите или пришлите фото');
       idle();
     },
     async 'plan.free'() {
-      await say('Конечно! Я рядом: если понадобится план, кофе или подсказка — пиши. А ещё пришли фото вещи — отложу в избранное на Маркете');
+      await say('Конечно! Я рядом: если понадобится план, кофе или подсказка — пишите. А ещё пришлите фото вещи — отложу в избранное на Маркете');
       idle();
     },
     async showplan() {
@@ -419,7 +421,7 @@
     },
     async now() {
       await think(['Смотрю, что рядом и что скоро начнётся']);
-      await say('Прямо сейчас рядом с тобой:');
+      await say('Прямо сейчас рядом с вами:');
       card('events', { ids: ['robots', 'workshop', 'listen'], title: 'В ближайший час' });
       idle();
     },
@@ -432,37 +434,37 @@
     async 'lp.start'() {
       const s = st();
       sys(`${s.clock.day} · ${s.clock.time} · дома`);
-      await say(`Привет${name()}! В Яндекс 01 на выходных много твоего 👀`);
+      await say(`Привет${name()}! В Яндекс 01 на выходных много вашего 👀`);
       await say('В субботу в 20:30 — **закрытый предпоказ «Северный ветер»**, бесплатно для подписчиков Плюса. А в 16:30 инженеры роверов рассказывают, как роботы учатся ходить');
       await say('Составить план на субботу?');
-      chips([{ label: 'Да, давай', go: 'lp.when', main: true }, { label: 'Позже', go: 'lp.later' }]);
+      chips([{ label: 'Да, составить', go: 'lp.when', main: true }, { label: 'Позже', go: 'lp.later' }]);
     },
     async 'lp.when'() {
-      await say('Когда придёшь и сколько у тебя времени?');
+      await say('Когда придёте и сколько у вас времени?');
       chips([{ label: 'К 16:00, на весь вечер', go: 'lp.build', arg: 'learn', main: true }, { label: 'Только к кино', go: 'lp.build', arg: 'evening' }]);
     },
     async 'lp.build'(mode) {
-      await think(['Смотрю расписание субботы', 'Проверяю места на предпоказ', 'Учитываю, что ты любишь sci-fi']);
+      await think(['Смотрю расписание субботы', 'Проверяю места на предпоказ', 'Учитываю, что вы любите sci-fi']);
       const p = buildPlan(mode, { noCoffee: true });
       S.set((s) => { s.visit.plan = p; });
       card('plan');
       const both = mode === 'learn';
-      await say(both ? 'Записать тебя на лекцию и на предпоказ?' : 'Записать на предпоказ?');
+      await say(both ? 'Записать вас на лекцию и на предпоказ?' : 'Записать на предпоказ?');
       chips([{ label: both ? 'Записать на оба' : 'Записать', go: 'lp.reg', arg: mode, main: true }, { label: 'Не надо', go: 'lp.later' }]);
     },
     async 'lp.reg'(mode) {
       const ids = mode === 'learn' ? ['robots', 'premiere'] : ['premiere'];
       S.set((s) => { ids.forEach((id) => { if (!s.visit.regs.includes(id)) s.visit.regs.push(id); }); s.flags.planFromHome = true; });
-      await say(ids.length > 1 ? 'Готово, оба билета у тебя 👇' : 'Готово 👇');
+      await say(ids.length > 1 ? 'Готово, оба билета у вас 👇' : 'Готово 👇');
       ids.forEach((id) => card('ticket', { id }));
-      await say('В субботу просто приходи — я встречу у эскалатора 🙂');
+      await say('В субботу просто приходите — я встречу у эскалатора 🙂');
       S.set((s) => { s.beats.home = true; });
       idle();
     },
     async 'lp.later'() { await say('Хорошо, напомню в субботу утром 🙂'); S.set((s) => { s.beats.home = true; }); idle(); },
     async 'la.start'() {
       const s = st(); const Lm = L();
-      await say(`С приездом! 🎉 Вижу тебя у эскалатора`);
+      await say(`С приездом! 🎉 Вижу вас у эскалатора`);
       if (s.visit.plan) {
         const first = s.visit.plan.items[0];
         await say(`План на сегодня со мной. До первой точки — «${first.title}» в ${first.time} — почти час`);
@@ -478,7 +480,7 @@
     async 'fab.start'() {
       S.set((s) => { s.visit.where = 'fabrika'; });
       sys(`${st().clock.time} · Яндекс Фабрика, 3 этаж`);
-      await say('Ты в Фабрике 👀 Если что-то понравится — сфотографируй, я отложу в избранное на Маркете. Пакеты таскать не придётся');
+      await say('Вы в Фабрике 👀 Если что-то понравится — сфотографируйте, я отложу в избранное на Маркете. Пакеты таскать не придётся');
       chips([{ label: '📷 Сфотографировать', go: 'cam', main: true }, { label: 'Просто смотрю', go: 'fab.no' }]);
     },
     async 'fab.no'() { await say('Понял, не мешаю 🙂'); idle(); },
@@ -486,8 +488,8 @@
       const p = D.shots.fabrika.find((x) => x.id === id);
       await think(['Узнаю вещь по фото', 'Ищу на Маркете']);
       S.set((s) => { if (!s.visit.favs.includes(id)) s.visit.favs.push(id); });
-      S.log(`Отложил в избранное: ${p.title}`, 'heart');
-      S.remember(`Присматривался к вещи: ${p.title.toLowerCase()}`);
+      S.log(`В избранном: ${p.title}`, 'heart');
+      S.remember(`Понравилась вещь: ${p.title.toLowerCase()}`);
       await say(`Это **${p.title}**, ${p.price}. Добавил в избранное на Маркете ❤️`);
       card('product', { id });
       await say('Привезти домой, чтобы не носить с собой?');
@@ -495,7 +497,7 @@
     },
     async 'fab.deliver'(id) {
       const p = D.shots.fabrika.find((x) => x.id === id);
-      S.log(`Заказал доставку: ${p.title}`, 'bag');
+      S.log(`Доставка: ${p.title}`, 'bag');
       await say('Готово: привезём завтра с 10 до 14, оплата при получении. Руки свободны — гуляем дальше 🙌');
       idle();
     },
@@ -508,19 +510,19 @@
       sys(`${st().clock.time} · до начала 15 минут`);
       await say(`Через 15 минут — **${e.title}**, ${e.place}, ${e.floor} этаж. Идти 3 минуты`);
       card('ticket', { id });
-      await say('Покажи QR на входе. Могу попросить место у прохода — сказать организаторам?');
+      await say('Покажите QR на входе. Могу попросить место у прохода — сказать организаторам?');
       chips([{ label: 'Да, у прохода', go: 'ev.seat', arg: id, main: true }, { label: 'Не нужно', go: 'ev.ok', arg: id }]);
     },
     async 'ev.seat'(id) { await say('Сказал: третий ряд, у прохода. Хорошей лекции!'); STEPS.markDone(id); idle(); },
     async 'ev.ok'(id) { await say('Хорошей лекции!'); STEPS.markDone(id); idle(); },
-    markDone(id) { S.set((s) => { s.visit.done = [...new Set([...(s.visit.done || []), id, 'coffee'])]; }); S.log(`Был: ${D.events[id].title}`, 'check'); },
+    markDone(id) { S.set((s) => { s.visit.done = [...new Set([...(s.visit.done || []), id, 'coffee'])]; }); S.log(`Посетили: ${D.events[id].title}`, 'check'); },
 
     // После визита
     async 'eve.start'() {
       const s = st();
       sys(`${s.clock.day} · ${s.clock.time} · дома`);
       if (!s.user.lumen) return STEPS['onb.home']();
-      await say(`Привет${name()}! Ну как тебе Яндекс 01? 🙂`);
+      await say(`Привет${name()}! Ну как вам Яндекс 01? 🙂`);
       const opts = [];
       if (s.visit.regs.includes('robots')) opts.push('Лекция про роботов');
       if (s.visit.regs.includes('author')) opts.push('Встреча с автором');
@@ -534,12 +536,12 @@
     },
     async 'eve.fav'(what) {
       S.remember(`Больше всего понравилось в Я01: ${what.toLowerCase()}`);
-      await say('Записал! Пришли пару фото, если остались, — начислю **100 баллов Плюса**. Так в Я01 станет больше того, что любишь ты');
+      await say('Записал! Пришлите пару фото, если остались, — начислю **100 баллов Плюса**. Так в Я01 станет больше того, что любите вы');
       chips([{ label: '📷 Прислать фото', go: 'photoMem', main: true }, { label: 'Без фото', go: 'eve.recs' }]);
     },
     async 'eve.photo'() {
       S.set((s) => { s.points += 100; s.flags.pointsFlash = true; });
-      S.log('Рассказал о визите — +100 баллов', 'points');
+      S.log('Рассказ о визите — +100 баллов', 'points');
       Plus.renderProfile();
       await say('Классный кадр ✨ Сохранил в историю визита');
       card('reward', { n: 100 });
@@ -560,14 +562,14 @@
       Plus.renderHome();
       idle();
     },
-    async 'eve.end'() { await say('Хорошо! Если захочешь — я рядом 🙂'); idle(); },
+    async 'eve.end'() { await say('Хорошо! Если захотите — я рядом 🙂'); idle(); },
 
     // Онбординг дома (отложил в Я01 или не было Плюса)
     async 'onb.home'() {
       const s = st();
-      await say(`Привет${name()}! Это Люмен. Сегодня в Яндекс 01 не успели познакомиться — давай сейчас, это минута`);
+      await say(`Привет${name()}! Это Люмен. Сегодня в Яндекс 01 не успели разбудить вашего Люмена — давайте сейчас, это минута`);
       if (!s.user.hasPlus) { await say('Я часть Плюса — первый месяц бесплатно. А кофе в подарок будет ждать в следующий визит ☕️'); card('trial'); return; }
-      chips([{ label: 'Давай', go: 'onb.pick', main: true }, { label: 'Не сейчас', go: 'eve.end' }]);
+      chips([{ label: 'Разбудить своего Люмена', go: 'onb.pick', main: true }, { label: 'Не сейчас', go: 'eve.end' }]);
     },
 
     // Открыли чат без контекста
@@ -575,8 +577,8 @@
       const s = st();
       if (s.visit.inside && !s.visit.ended) return STEPS.arrive();
       if (s.user.lumen) return STEPS['lp.start']();
-      card('hero', { title: 'Привет! Я Люмен', text: 'ИИ-компаньон Плюса. В Яндекс 01 гуляю рядом: план, события, кофе без очереди' });
-      await say('Познакомимся по-настоящему, когда придёшь в Яндекс 01 — отсканируй QR у эскалатора. А пока могу рассказать, что там идёт');
+      card('hero', { title: 'Привет! Я Люмен', text: 'ИИ-компаньон Плюса. В Яндекс 01 гуляю рядом с вами: план, события, кофе без очереди', pose: 'sit' });
+      await say('Разбудить своего Люмена можно в Яндекс 01 — отсканируйте QR у эскалатора. А пока могу рассказать, что там идёт');
       chips([{ label: 'Что идёт в субботу?', go: 'next.events', main: true }]);
     },
   };
@@ -596,8 +598,8 @@
     const dr = D.drinks.find((x) => x.id === v.drink);
     S.set((s) => { s.visit.coffee.status = 'ready'; });
     S.log(`${dr.name} готов`, 'coffee');
-    UI.push({ app: 'lumen', title: `${dr.name} готов ☕️`, text: `Забери на стойке, ${dr.place}, 3 этаж. Покажи код из чата`, onTap: () => { Y01.open('lumen'); } });
-    add({ k: 'l', text: `Твой ${dr.name.toLowerCase()} готов — стойка «${dr.place.replace(/.*«(.+)».*/, '$1')}» в конце этажа слева ☕️`, who: who() });
+    UI.push({ app: 'lumen', title: `${dr.name} готов ☕️`, text: `Можно забирать: ${dr.place}, 3 этаж. Покажите код из чата`, onTap: () => { Y01.open('lumen'); } });
+    add({ k: 'l', text: `Ваш ${dr.name.toLowerCase()} готов — стойка «${dr.place.replace(/.*«(.+)».*/, '$1')}» в конце этажа слева ☕️`, who: who() });
     refreshCards(); Y01.render();
   }
 
@@ -620,10 +622,10 @@
     if (/где|как пройти|карта|этаж/.test(t)) { run('_where'); return; }
     run('_fallback', cs);
   }
-  STEPS._wc = async () => { await say('Ближайший — у студий Яндекс Музыки, 3 этаж, метров 40 от тебя'); idle(); };
-  STEPS._where = async () => { await say('Открою карту этажа — там отмечены зоны и твой маршрут'); chips([{ label: 'Открыть карту', go: 'openMap', main: true }]); };
+  STEPS._wc = async () => { await say('Ближайший — у студий Яндекс Музыки, 3 этаж, метров 40 от вас'); idle(); };
+  STEPS._where = async () => { await say('Открою карту этажа — там отмечены зоны и ваш маршрут'); chips([{ label: 'Открыть карту', go: 'openMap', main: true }]); };
   STEPS._fallback = async (prev) => {
-    await say('Я прототип и пока отвечаю по сценарию 🙂 В боевой версии здесь будет живой разговор. Выбери вариант ниже');
+    await say('Я прототип и пока отвечаю по сценарию 🙂 В боевой версии здесь будет живой разговор. Выберите вариант ниже');
     chips(prev && prev.length ? prev : idleChips());
   };
   acts.lsend = () => { const i = $('#y01 .composer input'); if (!i) return; const v = i.value; i.value = ''; free(v); };

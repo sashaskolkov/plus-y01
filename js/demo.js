@@ -14,7 +14,7 @@
   const BEATS = [
     {
       id: 'home', chapter: 'До визита', when: () => 'Чт, 26 ноября · 20:40',
-      title: () => ({ anon: 'Видишь рекламу Я01', id: 'Пуш от Яндекса', plus: 'Пуш от Плюса', lumen: 'Люмен зовёт в Я01' }[st().persona]),
+      title: () => ({ anon: 'Реклама Я01 на ровере', id: 'Пуш от Яндекса', plus: 'Пуш от Плюса', lumen: 'Люмен зовёт в Я01' }[st().persona]),
       cjm: () => ({ anon: 'Флоу 4 · ничего не знаем о человеке', id: 'Флоу 1–2 · знаем Яндекс ID', plus: 'Флоу 1–2 · есть Плюс → пуш про пространство', lumen: 'Флоу 3 · есть Люмен → приглашение и план' }[st().persona]),
       run() {
         S.setClock('Четверг, 26 ноября', '20:40');
@@ -40,7 +40,7 @@
     },
     {
       id: 'coffee', chapter: 'Внутри', when: () => `Сб · ${hhmm('15:42', 4)}`,
-      title: () => 'Кофе готов, пока ты поднимался',
+      title: () => 'Кофе готов, пока вы поднимались',
       cjm: () => 'В конце онбординга дарим кофе',
       available: () => st().visit.coffee && st().visit.coffee.status === 'cooking',
       skipIf: () => !st().visit.coffee || st().visit.coffee.status !== 'cooking',
@@ -55,19 +55,19 @@
       run() {
         const id = firstEvent(); const e = D.events[id];
         S.setClock(null, hhmm(e.time, -15));
-        UI.push({ app: 'lumen', title: `Через 15 минут: ${e.title}`, text: `${e.place}, ${e.floor} этаж. Твой билет — в чате`, onTap: () => { Y01.open('lumen'); Lumen.start('eventSoon', id); } });
+        UI.push({ app: 'lumen', title: `Через 15 минут: ${e.title}`, text: `${e.place}, ${e.floor} этаж. Ваш билет — в чате`, onTap: () => { Y01.open('lumen'); Lumen.start('eventSoon', id); } });
       },
     },
     {
       id: 'fabrika', chapter: 'Внутри', when: () => 'Сб · 17:50',
-      title: () => 'Ты в Яндекс Фабрике',
+      title: () => 'Вы в Яндекс Фабрике',
       cjm: () => 'Фото товара Люмену → избранное на Маркете',
       available: () => !!st().beats.arrive,
       run() { S.setClock(null, '17:50'); S.set((s) => { s.visit.inside = true; }); Y01.open('lumen'); Lumen.start('fabrika'); },
     },
     {
       id: 'leave', chapter: 'Уход', when: () => `Сб · ${st().visit.regs.includes('premiere') ? '22:35' : '20:10'}`,
-      title: () => (st().visit.regs.includes('premiere') ? 'Сеанс закончился, вызываешь такси' : 'Вызываешь такси домой'),
+      title: () => (st().visit.regs.includes('premiere') ? 'Сеанс закончился, вызываем такси' : 'Вызываем такси домой'),
       cjm: () => 'Как узнаём, что человек ушёл: вызвал такси',
       available: () => !!st().beats.arrive,
       run() {
@@ -78,12 +78,12 @@
         S.log('Вызвал такси — визит завершён', 'taxi');
         S.set((s) => { s.visit.ended = true; s.visit.inside = false; s.scene = 'left'; if (s.visit.regs.includes('premiere')) s.visit.done = [...new Set([...(s.visit.done || []), 'premiere'])]; });
         Plus.renderHome();
-        if (S.lumen()) setTimeout(() => { Lumen.say('Хорошей дороги! Вечером спрошу, как тебе было 🙂'); }, 900);
+        if (S.lumen()) setTimeout(() => { Lumen.say('Хорошей дороги! Вечером спрошу, как вам было 🙂'); }, 900);
       },
     },
     {
       id: 'evening', chapter: 'После визита', when: () => `Сб · ${st().visit.regs.includes('premiere') ? '23:20' : '21:40'}`,
-      title: () => (S.lumen() ? 'Люмен спрашивает, как всё прошло' : 'Предлагаем познакомиться с Люменом дома'),
+      title: () => (S.lumen() ? 'Люмен спрашивает, как всё прошло' : 'Предлагаем разбудить своего Люмена дома'),
       cjm: () => (S.lumen() ? 'После визита: отзыв → баллы → книга, альбом, событие' : 'Онбординг дома; нет Плюса — предлагаем подключить'),
       available: () => !!st().beats.leave,
       run() {
@@ -92,8 +92,8 @@
         Y01.close();
         const L = S.lumen();
         UI.lock({ day: 'Суббота, 28 ноября', time: t, notes: [L
-          ? { app: 'lumen', title: 'Как тебе Яндекс 01? 🙂', text: `${L.name}: расскажи, что понравилось больше всего — начислю баллы Плюса`, onTap: () => { Y01.open('lumen'); Lumen.start('evening'); } }
-          : { app: 'plus', title: 'Познакомься с Люменом — это минута', text: 'А в следующий визит в Яндекс 01 тебя будет ждать кофе в подарок', onTap: () => { Y01.open('lumen'); Lumen.start('onbHome'); } }] });
+          ? { app: 'lumen', title: 'Как вам Яндекс 01? 🙂', text: `${L.name}: расскажите, что понравилось больше всего — начислю баллы Плюса`, onTap: () => { Y01.open('lumen'); Lumen.start('evening'); } }
+          : { app: 'plus', title: 'Разбудите своего Люмена — это минута', text: 'А в следующий визит в Яндекс 01 вас будет ждать кофе в подарок', onTap: () => { Y01.open('lumen'); Lumen.start('onbHome'); } }] });
       },
     },
     {
@@ -106,7 +106,7 @@
         Y01.close();
         S.set((s) => { s.homeAfter = true; s.tab = 'home'; });
         Plus.render();
-        UI.push({ app: 'plus', title: 'Люмен: альбом «Огни» уже вышел', text: 'Ты отложил его после Яндекс 01. Включить?', onTap: () => acts.playRecAlbum() });
+        UI.push({ app: 'plus', title: 'Люмен: альбом «Огни» уже вышел', text: 'Вы отложили его после Яндекс 01. Включить?', onTap: () => acts.playRecAlbum() });
       },
     },
   ];
@@ -135,7 +135,7 @@
     const el = UI.scene(`<div class="ad">
       <div class="ad-bg"></div>
       <div class="ad-rover"><div class="ad-box">${A.y01Logo(30)}<b>Яндекс 01<br>открылся</b><small>Курский вокзал</small></div><i class="w1"></i><i class="w2"></i><i class="w3"></i></div>
-      <div class="ad-text"><small>Флоу 4 · ничего не знаем о человеке</small><h3>Ты не залогинен — пуш прислать некому</h3><p>Ты видишь ровера с оклейкой Я01 у метро и решаешь зайти в субботу. Узнаем тебя уже внутри — на эскалаторе</p>
+      <div class="ad-text"><small>Флоу 4 · ничего не знаем о человеке</small><h3>Вы не залогинены — пуш прислать некому</h3><p>Вы видите ровера с оклейкой Я01 у метро и решаете зайти в субботу. Узнаем вас уже внутри — на эскалаторе</p>
       <button class="btn light" data-act="adDone">Понятно, к субботе ${I.chevron}</button></div></div>`, 'adscene');
     void el;
   }
@@ -145,13 +145,39 @@
     const el = UI.scene(`<div class="cam">
       <div class="cam-view"></div>
       <div class="cam-where">Эскалатор на 3 этаж · галерея «Чкалов»</div>
-      <div class="cam-stand">${A.y01Logo(30)}<h3>Гуляем по Я01 вместе с Люменом</h3>${A.qr('escalator-y01', 150)}<small>Наведи камеру телефона</small></div>
+      <div class="cam-stand">${A.y01Logo(30)}<h3>Гуляем по Я01 вместе с Люменом</h3>${A.qr('escalator-y01', 150)}<small>Наведите камеру телефона</small></div>
       <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
       <button class="cam-banner" data-act="qrOpen"><span class="appicon plus">${A.plusMark(28)}</span><div><b>Открыть в «Яндекс Плюсе»</b><small>Яндекс 01 · гуляем с Люменом</small></div></button>
       <div class="cam-bottom"><span class="cam-hint">Камера телефона нашла QR-код</span><div class="cam-modes"><span>ВИДЕО</span><span class="on">ФОТО</span><span>ПОРТРЕТ</span></div><span class="shutter"><i></i></span></div>
     </div>`, 'camscene');
     setTimeout(() => { el.querySelector('.cam') && el.querySelector('.cam').classList.add('found'); UI.haptic(15); }, 1300);
   }
+  // Сканер QR внутри мини-аппа Я01: имитируем скан на эскалаторе
+  acts.scanQR = () => {
+    const el = UI.scene(`<div class="cam inapp">
+      <div class="cam-view"></div>
+      <div class="cam-where">Наведите камеру на QR-код в Яндекс 01</div>
+      <button class="roundbtn cam-close" data-act="scanClose">${I.close}</button>
+      <div class="cam-stand">${A.y01Logo(30)}<h3>Гуляем по Я01 вместе с Люменом</h3>${A.qr('escalator-y01', 150)}<small>Эскалатор на 3 этаж</small></div>
+      <div class="cam-frame"><i></i><i></i><i></i><i></i></div>
+      <div class="cam-bottom"><span class="cam-hint scan-status">Ищем QR-код…</span></div>
+    </div>`, 'camscene');
+    setTimeout(() => {
+      const c = el.querySelector('.cam'); if (!c) return;
+      c.classList.add('found'); UI.haptic(15);
+      const st2 = el.querySelector('.scan-status'); if (st2) st2.textContent = 'QR распознан: эскалатор, 3 этаж';
+      setTimeout(() => {
+        if (!el.querySelector('.cam')) return;
+        S.set((s) => {
+          s.beats.home = true; s.beats.arrive = true;
+          if (!s.clock.day.startsWith('Суббота')) s.clock = { day: 'Суббота, 28 ноября', time: '15:42' };
+        });
+        UI.closeScene();
+        Y01.show('lumen'); Lumen.start('escalator'); render();
+      }, 1100);
+    }, 1300);
+  };
+  acts.scanClose = () => UI.closeScene();
   acts.qrOpen = () => {
     UI.closeScene();
     S.set((s) => { s.tab = 'home'; });
@@ -167,9 +193,9 @@
       <div class="w-top">${A.plusWordmark(20)}<span class="w-x">×</span>${A.y01Logo(24)}</div>
       <h1>Яндекс 01 внутри Плюса</h1>
       <p class="w-lead">Прототип: как пространство узнаёт гостя, а Люмен ведёт его от пуша дома до вечернего разговора после визита</p>
-      <label class="w-label">Как к тебе обращаться?</label>
+      <label class="w-label">Как к вам обращаться?</label>
       <input class="w-name" type="text" placeholder="Имя" value="${esc(s.name)}" maxlength="24" autocomplete="given-name">
-      <label class="w-label">Кто ты в этой истории?</label>
+      <label class="w-label">Кто вы в этой истории?</label>
       <div class="w-personas">${D.personas.map((p) => `<button class="w-p ${p.id === (s.persona || 'plus') ? 'on' : ''}" data-act="wPersona" data-arg="${p.id}" style="--pc:${D.personaColors[p.tone]}"><i></i><div><b>${p.title}${p.main ? ' <em>главный</em>' : ''}</b><small>${p.sub}</small></div></button>`).join('')}</div>
       <div class="w-how"><div>${I.flag}<span>Сюжет идёт по CJM: дом → эскалатор → Фабрика → вечер. Кнопка <b>⏩ Дальше</b> перематывает время</span></div>
       <div>${I.sparkle}<span>Внутри всё настоящее на ощупь: чат с Люменом, план, карта, билеты в календарь</span></div></div>
@@ -203,7 +229,7 @@
         return `<button class="g-beat ${done ? 'done' : ''} ${isNext ? 'next' : ''} ${!avail && !done ? 'off' : ''}" data-act="gRun" data-arg="${b.id}" ${!avail && !done ? 'disabled' : ''}><span class="g-mark">${done ? I.check : isNext ? '▸' : ''}</span><span><b>${esc(b.title())}</b><small>${esc(b.when())}</small></span></button>`;
       }).join('')}</div>`).join('')}</div>
       <div class="g-foot"><button class="pill" data-act="gReset">${I.refresh} Сначала</button><button class="pill" data-act="gMute">${s.flags.mute ? 'Звук выкл' : 'Звук вкл'}</button>${compact ? '' : '<button class="pill" data-act="gAbout">О прототипе</button>'}</div>
-      ${compact ? '' : `<p class="g-fine">Открой ссылку на телефоне — там прототип во весь экран. Логин, оплата и данные — ненастоящие, всё хранится только в этом браузере</p>`}`;
+      ${compact ? '' : `<p class="g-fine">Откройте ссылку на телефоне — там прототип во весь экран. Логин, оплата и данные — ненастоящие, всё хранится только в этом браузере</p>`}`;
   }
   function renderGuide() { const g = $('#guide'); if (g) g.innerHTML = guideHTML(false); }
   function renderStory() {

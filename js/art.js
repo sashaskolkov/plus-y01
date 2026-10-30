@@ -179,7 +179,7 @@
       </g>`;
     }).join('');
     const path = route.length > 1 ? `<polyline class="route" points="${route.map((z) => ctr(z).join(',')).join(' ')}"/>` : '';
-    const marks = route.map((z, i) => { const [x, y] = ctr(z); return `<g class="rmark"><circle cx="${x}" cy="${y - (z.h / 2) - 2}" r="7"/><text x="${x}" y="${y - (z.h / 2) + 1}" text-anchor="middle">${i + 1}</text></g>`; }).join('');
+    const marks = route.map((z, i) => { const [x, y] = ctr(z); const lw = String((opt.labels && opt.labels[i]) || i + 1).length; return `<g class="rmark"><rect x="${x - Math.max(7, lw * 3)}" y="${y - (z.h / 2) - 9}" width="${Math.max(14, lw * 6)}" height="14" rx="7"/><text x="${x}" y="${y - (z.h / 2) + 1}" text-anchor="middle" style="font-size:${String((opt.labels && opt.labels[i]) || i + 1).length > 2 ? 6 : 8}px">${(opt.labels && opt.labels[i]) || i + 1}</text></g>`; }).join('');
     const screens = (F.screens || []).map((s) => `<g class="lscreen"><rect x="${s.x - 3}" y="${s.y - 7}" width="6" height="14" rx="1.5"/></g>`).join('');
     let you = '';
     if (opt.you) {

@@ -1,0 +1,121 @@
+/* ================= Мини-апп Meidzi ================= */
+#meidzi { position: absolute; inset: 0; z-index: 40; background: #F5F2F8; color: #17151c; display: flex; flex-direction: column;
+  transform: translateX(104%); transition: transform .45s var(--ease); box-shadow: -20px 0 60px rgba(0,0,0,.4); }
+#meidzi.open { transform: none; }
+.mz-head { flex: none; display: flex; align-items: center; gap: 8px; padding: calc(var(--sat) + 4px) 12px 10px; background: #F5F2F8; }
+.mz-back { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+.mz-ttl { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.mz-ttl .mz-logo { border-radius: 8px; }
+.mz-ttl b { font-family: var(--display); font-size: 17px; display: block; }
+.mz-ttl small { font-size: 11.5px; color: #77727f; }
+#meidzi .capsule { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.08); }
+#meidzi .capsule i { background: rgba(0,0,0,.15); }
+.mz-body { flex: 1; overflow-y: auto; padding: 0 16px; scrollbar-width: none; }
+.mz-body::-webkit-scrollbar { display: none; }
+.mz-hero { display: flex; gap: 14px; align-items: center; padding: 16px; border-radius: 24px; color: #fff;
+  background: linear-gradient(180deg, #CFC8E6 0%, #F2A93A 45%, #E2461C 80%, #F3A23A 100%); }
+.mz-hero .mz-logo { border-radius: 16px; flex: none; box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+.mz-hero h2 { margin: 0 0 4px; font-family: var(--display); font-size: 19px; line-height: 1.1; text-shadow: 0 1px 8px rgba(120,30,0,.35); }
+.mz-hero p { margin: 0; font-size: 13px; line-height: 1.35; text-shadow: 0 1px 6px rgba(120,30,0,.35); }
+.mz-where { display: flex; gap: 8px; align-items: center; margin: 12px 2px 0; font-size: 13px; color: #55505e; }
+.mz-where .ic { width: 18px; height: 18px; color: #E2461C; flex: none; }
+.mz-active { margin-top: 12px; width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; background: #17151c; color: #fff; text-align: left; font-weight: 500; font-size: 14px; }
+.mz-active span { flex: 1; }
+.mz-sec { margin-top: 22px; }
+.mz-sec h3 { font-family: var(--display); font-size: 20px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px; }
+.mz-plusnote { margin: -4px 0 10px; font-size: 12.5px; color: #7E33FF; }
+.mz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mz-item { position: relative; background: #fff; border-radius: 20px; padding: 12px; display: flex; flex-direction: column; gap: 4px; text-align: left; border: 2px solid transparent; box-shadow: 0 2px 10px rgba(30,20,50,.05); }
+.mz-item.plusonly { border-color: #9A5BFF; box-shadow: 0 0 0 3px rgba(154,91,255,.15); }
+.mz-item.locked .mz-cup { filter: grayscale(.6) opacity(.6); }
+.mz-item b { font-size: 14.5px; font-weight: 500; line-height: 1.2; margin-top: 6px; }
+.mz-item small { font-size: 12px; color: #77727f; line-height: 1.3; }
+.mz-price { margin-top: auto; padding-top: 8px; font-family: var(--display); font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 4px; }
+.mz-price .ic { width: 16px; height: 16px; }
+.mz-item.plusonly .mz-price { color: #7E33FF; }
+.mz-qty { position: absolute; top: 10px; right: 10px; min-width: 24px; height: 24px; border-radius: 12px; background: #E2461C; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.mz-cup { display: block; position: relative; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff 0, var(--c1) 30%, var(--c2) 100%); box-shadow: inset 0 -4px 10px rgba(0,0,0,.12), 0 6px 14px rgba(0,0,0,.1); }
+.mz-cup i { position: absolute; inset: 18%; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); }
+.mz-cartbar { position: absolute; left: 12px; right: 12px; bottom: calc(14px + var(--sab)); height: 58px; border-radius: 20px; background: #17151c; color: #fff; display: flex; align-items: center; gap: 12px; padding: 0 18px 0 10px; box-shadow: 0 10px 30px rgba(0,0,0,.3); font-weight: 500; font-size: 16px; animation: msgin .3s var(--ease); }
+.mz-cartbar span:nth-child(2) { flex: 1; text-align: left; }
+.mz-cartbar b { font-family: var(--display); }
+.mz-cnt { width: 38px; height: 38px; border-radius: 12px; background: #E2461C; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+
+/* Шторки Meidzi (светлые) */
+.mz-sheet { color: #17151c; }
+.mz-sheet .sheet-p { color: #66616e; }
+.mz-sh-top { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+.mz-sh-top .mz-cup { flex: none; }
+.mz-opt { margin-top: 12px; }
+.mz-opt > small { display: block; font-size: 12.5px; color: #77727f; margin-bottom: 6px; }
+.mz-seg { display: flex; gap: 6px; background: #F0EDF4; border-radius: 14px; padding: 4px; }
+.mz-seg button { flex: 1; height: 40px; border-radius: 10px; font-size: 14px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+.mz-seg button em { font-style: normal; font-size: 11px; color: #77727f; font-weight: 400; }
+.mz-seg button.on { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.mz-addrow { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
+.mz-step { display: flex; align-items: center; gap: 4px; background: #F0EDF4; border-radius: 16px; height: 48px; padding: 0 4px; }
+.mz-step button { width: 40px; height: 40px; font-size: 22px; }
+.mz-step b { width: 22px; text-align: center; }
+.btn.mz-btn { background: #E2461C; box-shadow: 0 8px 24px rgba(226,70,28,.3); flex: 1; }
+.mz-lines div { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #ece8f0; font-size: 15px; }
+.mz-lines span { flex: 1; }
+.mz-lines small { display: block; font-size: 12px; color: #77727f; }
+.mz-lines button { color: #aaa; width: 28px; }
+.mz-lines .ic { width: 16px; height: 16px; }
+.mz-when { display: flex; gap: 10px; margin: 14px 0 0; padding: 12px; border-radius: 16px; background: #FFF4E8; }
+.mz-when .ic { color: #E2461C; flex: none; }
+.mz-when b { display: block; font-size: 14.5px; }
+.mz-when small { font-size: 12.5px; color: #77727f; line-height: 1.35; }
+.mz-pts, .mz-pay { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: #F0EDF4; margin-top: 10px; text-align: left; font-size: 14.5px; }
+.mz-pts span, .mz-pay span { flex: 1; }
+.mz-pts small, .mz-pay small { display: block; font-size: 12px; color: #77727f; }
+.mz-pts > i { width: 44px; height: 26px; border-radius: 13px; background: #d6d1dc; position: relative; transition: .2s; }
+.mz-pts > i::after { content: ''; position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: .2s; }
+.mz-pts.on > i { background: #7E33FF; }
+.mz-pts.on > i::after { left: 21px; }
+.mz-card { width: 40px; height: 26px; border-radius: 6px; background: linear-gradient(135deg, #222, #555); flex: none; }
+.mz-pay .ic { color: #3BB33B; }
+.mz-sheet .btn.block { margin-top: 16px; }
+
+/* Статус заказа */
+.mz-done { text-align: center; padding-top: 10px; }
+.mz-ok { width: 84px; height: 84px; border-radius: 50%; margin: 10px auto 12px; background: #FFE7D6; color: #E2461C; display: flex; align-items: center; justify-content: center; animation: pop .45s var(--ease); }
+.mz-ok .ic { width: 40px; height: 40px; }
+.mz-ok.ready { background: #E5F7D0; color: #3B9A1A; }
+.mz-done h2 { font-family: var(--display); font-size: 28px; margin: 0 0 8px; }
+.mz-done > p { margin: 0 8px; font-size: 15px; line-height: 1.4; color: #4b4652; }
+.mz-steps { display: flex; justify-content: center; gap: 6px; margin: 16px 0; }
+.mz-steps > span { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 15px; background: #ece8f0; font-size: 12.5px; color: #8a8590; }
+.mz-steps > span.on { background: #E5F7D0; color: #2E7A12; }
+.mz-steps > span.now { background: #FFE7D6; color: #C23A10; }
+.mz-steps .ic { width: 14px; height: 14px; }
+.mz-steps .spin { width: 12px; height: 12px; border-color: rgba(194,58,16,.25); border-top-color: #C23A10; }
+.mz-ticket { display: flex; gap: 14px; align-items: center; text-align: left; background: #fff; border-radius: 22px; padding: 14px; box-shadow: 0 2px 10px rgba(30,20,50,.06); }
+.mz-ticket small { font-size: 12px; color: #77727f; }
+.mz-ticket b { display: block; font-family: var(--display); font-size: 34px; line-height: 1; margin: 2px 0 6px; }
+.mz-ticket span { display: block; font-size: 13px; line-height: 1.4; }
+.mz-ticket em { display: block; font-style: normal; font-weight: 500; margin-top: 6px; }
+.mz-mapmini { margin-top: 12px; background: #17151c; border-radius: 22px; padding: 8px 6px 10px; }
+.mz-mapmini .floormap { margin-top: 0; }
+.mz-mapmini small { display: block; color: rgba(255,255,255,.7); font-size: 12px; margin-top: 4px; }
+.mz-done .btn { margin: 16px 0 30px; }
+.meidzi-ic { background: none; }
+.meidzi-ic .mz-logo { width: 60px; height: 60px; }
+.appicon.meidzi { background: none; }
+.appicon.meidzi .mz-logo { width: 38px; height: 38px; }
+
+/* Фото напитков, как в Drinkit */
+.mz-photo { display: block; position: relative; overflow: hidden; background: var(--bg); border-radius: 16px; aspect-ratio: 1; width: calc(100% + 24px); margin: -12px -12px 4px; border-radius: 18px 18px 14px 14px; }
+.mz-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.04); transition: transform .4s var(--ease); }
+.mz-item:active .mz-photo img { transform: scale(1.0); }
+.mz-item { padding: 12px; overflow: hidden; }
+.mz-item.plusonly .mz-photo::after { content: 'только с Плюсом'; position: absolute; left: 8px; top: 8px; background: rgba(126,51,255,.92); color: #fff; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 9px; }
+.mz-item.locked .mz-photo img { filter: saturate(.55) brightness(.9); }
+.mz-qty { z-index: 2; }
+.mz-photo.big { width: calc(100% + 40px); margin: -4px -20px 14px; aspect-ratio: 1.25; border-radius: 0; }
+.mz-photo.big img { transform: none; }
+.mz-photo.thumb { width: 74px; margin: 0; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+.mz-photo.line { width: 44px; margin: 0; border-radius: 12px; flex: none; }
+.mz-shots { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0 14px; }
+.mz-shots .mz-ok { margin: 0; width: 64px; height: 64px; }
+.mz-sh-top { margin-bottom: 6px; }

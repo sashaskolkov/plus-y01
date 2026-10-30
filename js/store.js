@@ -26,12 +26,14 @@
       scene: 'home',          // home → arrive → inside → left → after
       visit: { inside: false, coffee: null, plan: null, regs: [], favs: [], log: [], ended: false, feedback: false, photos: [] },
       chat: { messages: [], chips: null, mark: null, resume: null, data: null },
-      memory: p.hasLumen ? ['Любит фантастику и кино про будущее', 'Читает Лема и Стругацких', 'Был на выставке Афиши в октябре'] : [],
+      memory: p.hasLumen ? ['Любит фантастику и кино про будущее', 'Читает Лема и Стругацких', 'Ходили на выставку Афиши в октябре'] : [],
       flags: {},
       beats: {},
       homeAfter: false,
       nowPlaying: { title: 'Лето', artist: 'Давай', g: ['#2A2A2A', '#7A7A7A'], playing: false },
       bookPinned: null,
+      meidzi: { cart: [], order: null, n: 46 },
+      smysl: { tab: 'new', books: [], cafe: [], wrap: true, orders: [], n: 311 },
       tab: 'home',
       y01: { open: false, screen: 'today', floor: 3 },
     };

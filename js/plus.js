@@ -9,6 +9,7 @@
     { id: 'kp', label: 'Кинопоиск', icon: I.kp },
     { id: 'music', label: 'Музыка', icon: I.music },
     { id: 'books', label: 'Книги', icon: I.books },
+    { id: 'y01', label: 'Я01', icon: '<span class="tab01"><i class="r"></i><i></i><i></i></span>' },
     { id: 'profile', label: 'Профиль' },
   ];
 
@@ -29,8 +30,8 @@
       if (c.kind === 'movie') art = A.poster(c);
       if (c.kind === 'book') art = A.bookCover(c, '', `<span class="pct">${c.progress}%</span>`);
       if (c.kind === 'album') art = A.cover(c);
-      if (c.kind === 'wave') art = `<div class="wave-blob">${I.play}</div>`;
-      const act = c.kind === 'album' || c.kind === 'wave' ? `data-act="playMood" data-arg="${c.kind}"` : c.kind === 'book' ? 'data-act="tab" data-arg="books"' : 'data-act="tab" data-arg="kp"';
+      if (c.kind === 'y01') art = `<div class="y01-mood">${A.y01Logo(20)}<b>${esc(c.title)}</b><small>${esc(c.when)} · Яндекс 01</small><i class="y01-mood-glow"></i></div>`;
+      const act = c.kind === 'album' ? `data-act="playMood" data-arg="${c.kind}"` : c.kind === 'book' ? 'data-act="tab" data-arg="books"' : c.kind === 'y01' ? 'data-act="openY01" data-arg="today"' : 'data-act="tab" data-arg="kp"';
       return `<div class="mcard" ${act}>${art}<span class="lbl">${c.label}</span></div>`;
     }).join('');
   }
@@ -41,16 +42,16 @@
     const inside = s.visit.inside && !s.visit.ended;
     if (inside) {
       return `<div class="y01-promo" data-act="openY01" data-arg="today">
-        <div class="row1">${A.y01Logo(26)}<span class="kicker"><i class="live-dot"></i> Ты в Яндекс 01</span></div>
+        <div class="row1">${A.y01Logo(26)}<span class="kicker"><i class="live-dot"></i> Вы в Яндекс 01</span></div>
         <h3>${L ? `${esc(L.name)} рядом` : 'Люмен рядом'}</h3>
-        <p>${s.visit.plan ? `Следующая точка плана: ${esc(nextPlanPoint() || 'смотри план')}` : 'План, события и кофе без очереди'}</p>
-        ${L ? `<span class="lumen-peek">${A.lumen(L.id, 64, { idle: true })}</span>` : ''}
+        <p>${s.visit.plan ? `Следующая точка плана: ${esc(nextPlanPoint() || 'смотрите план')}` : 'План, события и кофе без очереди'}</p>
+        ${L ? `<span class="lumen-peek">${A.lumen(L.id, 64, { idle: true })}</span>` : '<img class="lumen-peek cat-walk" src="assets/cats/walk.jpg" alt="">'}
         <div class="row2"><span class="btn sm red">Открыть</span></div>
       </div>`;
     }
     if (s.visit.ended) {
       return `<div class="y01-promo" data-act="openY01" data-arg="visit">
-        <div class="row1">${A.y01Logo(26)}<span class="kicker">Твой визит · суббота</span></div>
+        <div class="row1">${A.y01Logo(26)}<span class="kicker">Ваш визит · суббота</span></div>
         <h3>${s.visit.log.length} моментов в истории визита</h3>
         <p>${s.visit.regs.includes('next') ? 'Ждём 5 декабря на лекции про компьютерное зрение' : 'Посмотри, что было, и запланируй следующий раз'}</p>
         <div class="row2"><span class="btn sm ghost">Мой визит</span></div>
@@ -58,9 +59,9 @@
     }
     const plus = s.user.hasPlus;
     return `<div class="y01-promo ${s.flags.promoPulse ? 'pulse' : ''}" data-act="openY01" data-arg="today">
-      <div class="row1">${A.y01Logo(26)}<span class="kicker">Новое · у Курского вокзала</span></div>
+      <div class="row1">${A.y01Logo(26)}</div>
       <h3>Яндекс 01 открылся</h3>
-      <p>${plus ? 'Первое пространство Яндекса в городе. Подписчикам Плюса — кофе в подарок и закрытые предпоказы' : 'Первое пространство Яндекса в городе: кино, музыка, книги, Фабрика и Люмен, который поведёт по визиту'}</p>
+      <p>${plus ? 'Пространство, где оживают технологии. Подписчикам Плюса — персональный опыт посещения и подарки от сервисов' : 'Первое пространство Яндекса в городе: кино, музыка, книги, Фабрика и Люмен, который поведёт по визиту'}</p>
       <div class="row2"><span class="btn sm red">Посмотреть</span>${plus ? `<span class="badge-plus">${A.plusMark(16)} для подписчиков</span>` : ''}</div>
     </div>`;
   }
@@ -77,7 +78,7 @@
     if (!s.homeAfter) return '';
     const L = S.lumen();
     return `<div class="after-block">
-      <div class="ah">${L ? A.lumen(L.id, 44, { aura: false }) : UI.orb(36)}<div><b>После Яндекс 01</b><small>${L ? esc(L.name) : 'Люмен'} собрал продолжение твоей субботы</small></div></div>
+      <div class="ah">${L ? A.lumen(L.id, 44, { aura: false }) : UI.orb(36)}<div><b>После Яндекс 01</b><small>${L ? esc(L.name) : 'Люмен'} собрал продолжение вашей субботы</small></div></div>
       <div class="after-items">
         <div class="after-item" data-act="openRecBook">${A.bookCover(D.recs.book)}<b>${esc(D.recs.book.title)}</b><small>Книга · ${esc(D.recs.book.author)}</small></div>
         <div class="after-item" data-act="playRecAlbum">${A.cover(D.recs.album)}<b>${esc(D.recs.album.title)}</b><small>Альбом · ${esc(D.recs.album.author)}</small></div>
@@ -161,7 +162,7 @@
         <div class="pcard"><h5>Подписка</h5><small>${u.trial ? 'Пробный период до 28 декабря 2026' : 'Активна до 17 октября 2027'}</small><span class="pill">Преимущества</span></div>
         <div class="pcard"><h5>Семейная группа</h5><div class="fam"><i class="me">${initial()}</i><i>+</i><i>+</i><i>+</i></div></div>
         <div class="pcard" id="pointsCard"><h5>Баллы Плюса</h5><div class="big">${s.points.toLocaleString('ru-RU')} ${A.plusMark(20)}</div><small>1 балл = 1 рубль</small><span class="pill" data-act="openY01" data-arg="today">Как потратить</span></div>
-        <div class="pcard"><h5>Люмен</h5>${L ? `<div style="display:flex;align-items:center;gap:8px;margin-top:6px">${A.lumen(L.id, 48, { aura: false })}<b style="font-size:16px">${esc(L.name)}</b></div><small>Знает ${s.memory.length} фактов о тебе</small>` : '<small>Ещё не знакомы. Познакомиться можно в Яндекс 01</small>'}<span class="pill" data-act="openY01" data-arg="${L ? 'lumen' : 'today'}">${L ? 'Чат' : 'Познакомиться'}</span></div>
+        <div class="pcard"><h5>Люмен</h5>${L ? `<div style="display:flex;align-items:center;gap:8px;margin-top:6px">${A.lumen(L.id, 48, { aura: false })}<b style="font-size:16px">${esc(L.name)}</b></div><small>Знает ${s.memory.length} фактов о вас</small>` : '<img class="cat-sleep" src="assets/cats/sleep.jpg" alt=""><small>Ещё спит. Разбудить своего Люмена можно в Яндекс 01</small>'}<span class="pill" data-act="openY01" data-arg="${L ? 'lumen' : 'today'}">${L ? 'Чат' : 'Разбудить'}</span></div>
       </div>` : `
       <div class="noplus-card"><b>Попробуйте Плюс</b><p>Кино, музыка, книги и Люмен — первый месяц бесплатно</p><button class="btn light sm" data-act="toast" data-arg="В прототипе Плюс подключается в сценарии Я01">Подключить</button></div>`}
       <div class="plist">
@@ -203,6 +204,7 @@
 
   // ---------- Действия ----------
   acts.tab = (tab) => {
+    if (tab === 'y01') { Y01.open('today'); return; }
     S.set((s) => { s.tab = tab; if (tab === 'books') s.flags.booksSeen = true; }, 'tab');
     renderTabbar(); showTab(tab);
     if (tab === 'books') renderBooks();

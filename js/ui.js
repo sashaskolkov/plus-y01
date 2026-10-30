@@ -20,6 +20,8 @@
     if (app === 'plus') return `<span class="appicon plus">${A.plusMark(30)}</span>`;
     if (app === 'go') return `<span class="appicon go">Go</span>`;
     if (app === 'ya') return `<span class="appicon ya">Я</span>`;
+    if (app === 'smysl') return `<span class="appicon smysl">${Smysl.logo(38)}</span>`;
+    if (app === 'meidzi') return `<span class="appicon meidzi">${Meidzi.logo(38)}</span>`;
     if (app === 'y01') return `<span class="appicon y01">${A.y01Logo(9)}</span>`;
     if (app === 'lumen') {
       const L = S.lumen();
@@ -27,10 +29,12 @@
     }
     return `<span class="appicon"></span>`;
   }
-  const appName = { plus: 'Яндекс Плюс', go: 'Яндекс Go', ya: 'Яндекс', lumen: 'Люмен · Яндекс Плюс', y01: 'Яндекс 01' };
+  const appName = { plus: 'Яндекс Плюс', go: 'Яндекс Go', ya: 'Яндекс', lumen: 'Люмен · Яндекс Плюс', y01: 'Яндекс 01', meidzi: 'Meidzi · Яндекс 01', smysl: 'Смысловая 226 · Яндекс 01' };
+  // Кот-Люмен вместо кружка, пока свой Люмен ещё не разбужен
   function orb(size = 30) {
-    return `<span class="orb" style="--s:${size}px"></span>`;
+    return `<span class="orb cat" style="--s:${size}px"><img src="assets/cats/face.jpg" alt="Люмен"></span>`;
   }
+
 
   // ---------- Пуш поверх приложения ----------
   let pushSeq = 0;
@@ -81,7 +85,7 @@
       <div class="lock-top"><div class="lock-day">${esc(day)}</div><div class="lock-time">${esc(time)}</div></div>
       ${hint ? `<div class="lock-hint">${esc(hint)}</div>` : ''}
       <div class="lock-notes">${notes.map((n, i) => `<div class="lnote" data-i="${i}">${appIcon(n.app)}<div class="push-body"><div class="push-top"><b>${esc(appName[n.app] || n.app)}</b><span>${esc(n.when || 'сейчас')}</span></div><div class="push-title">${esc(n.title)}</div>${n.text ? `<div class="push-text">${esc(n.text)}</div>` : ''}</div></div>`).join('')}</div>
-      <div class="lock-bottom"><span class="lock-torch"></span><span class="lock-swipe">Нажми на уведомление</span><span class="lock-cam"></span></div>`;
+      <div class="lock-bottom"><span class="lock-torch"></span><span class="lock-swipe">Нажмите на уведомление</span><span class="lock-cam"></span></div>`;
     el.classList.add('on');
     $$('.lnote', el).forEach((n) => {
       n.style.animationDelay = `${0.5 + Number(n.dataset.i) * 0.35}s`;

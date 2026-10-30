@@ -9,9 +9,9 @@
     const s = S.get(); const scr = s.y01.screen; const L = S.lumen();
     let ttl;
     if (scr === 'lumen') {
-      ttl = `${L ? A.lumen(L.id, 38, { aura: false }) : UI.orb(30)}<div><b>${L ? esc(L.name) : 'Люмен'}</b><small>${s.visit.inside && !s.visit.ended ? 'Гуляет с тобой по Яндекс 01' : 'Твой ИИ-компаньон в Плюсе'}</small></div>`;
+      ttl = `${L ? A.lumen(L.id, 38, { aura: false }) : UI.orb(30)}<div><b>${L ? esc(L.name) : 'Люмен'}</b><small>${s.visit.inside && !s.visit.ended ? 'Гуляет с вами по Яндекс 01' : 'Ваш ИИ-компаньон в Плюсе'}</small></div>`;
     } else {
-      const sub = s.visit.inside && !s.visit.ended ? `<span style="color:var(--y-green)">●</span> Ты здесь · ${whereLabel()}` : 'Курский вокзал · 10:00–23:00';
+      const sub = s.visit.inside && !s.visit.ended ? `<span style="color:var(--y-green)">●</span> Вы здесь · ${whereLabel()}` : 'Рабочие часы 10:00–23:00';
       ttl = `${A.y01Logo(24)}<div><b>Яндекс 01</b><small>${sub}</small></div>`;
     }
     $('#y01 .y01-head').innerHTML = `<div class="ttl">${ttl}</div><div class="capsule"><button data-act="y01more">${I.more}</button><i></i><button data-act="y01close">${I.close}</button></div>`;
@@ -30,7 +30,10 @@
       { id: 'map', label: 'Карта', icon: I.map },
       { id: 'visit', label: 'Мой визит', icon: I.ticket },
     ];
-    $('#y01 .y01-nav').innerHTML = items.map((it) => `<button class="${scr === it.id ? 'on' : ''}" data-act="y01nav" data-arg="${it.id}">${it.icon}<span>${esc(it.label)}</span>${it.id === 'lumen' && unread ? '<span class="badge">1</span>' : ''}</button>`).join('');
+    const btn = (it) => `<button class="${scr === it.id ? 'on' : ''}" data-act="y01nav" data-arg="${it.id}">${it.icon}<span>${esc(it.label)}</span>${it.id === 'lumen' && unread ? '<span class="badge">1</span>' : ''}</button>`;
+    $('#y01 .y01-nav').innerHTML = items.slice(0, 2).map(btn).join('')
+      + `<button class="navqr" data-act="scanQR" aria-label="Сканировать QR"><span>${I.qr}</span></button>`
+      + items.slice(2).map(btn).join('');
   }
 
   // ---------- Сегодня ----------
@@ -38,9 +41,9 @@
     const s = S.get();
     const reg = s.visit.regs.includes(e.id);
     const c = ZC(e.zone, e.floor);
-    return `<div class="ev" style="--c:${c}"><div class="time"><b>${e.time.length > 5 ? '' : e.time}</b><small>${e.time.length > 5 ? e.time : `${e.floor} этаж`}</small></div><i class="bar"></i>
+    return `<div class="ev" style="--c:${c}"><div class="time"><b>${e.time.length > 5 ? '' : e.time}</b><small>${e.time.length > 5 ? e.time : (e.short || `${e.floor} этаж`)}</small></div><i class="bar"></i>
       <div class="info"><b>${esc(e.title)}</b><small>${esc(e.kind)} · ${esc(e.place)}</small>${e.plus ? `<span class="badge-plus">${A.plusMark(16)} ${esc(e.perk)}</span>` : e.seats ? `<small style="color:var(--y-yellow)">${esc(e.seats)}</small>` : ''}</div>
-      ${opts.noAct || e.time.length > 5 ? '' : `<div class="act">${reg ? `<button class="pill done" data-act="openTicket" data-arg="${e.id}">${I.check} Идёшь</button>` : `<button class="pill" data-act="regEvent" data-arg="${e.id}">Записаться</button>`}</div>`}
+      ${opts.noAct || e.time.length > 5 ? '' : `<div class="act">${reg ? `<button class="pill done" data-act="openTicket" data-arg="${e.id}">${I.check} Вы идёте</button>` : `<button class="pill" data-act="regEvent" data-arg="${e.id}">Записаться</button>`}</div>`}
     </div>`;
   }
 
@@ -50,21 +53,27 @@
     const day = s.clock.day.startsWith('Суббота') ? 'Сегодня' : 'В субботу, 28 ноября';
     let cta, h2, p;
     if (inside) {
-      h2 = L ? `${esc(L.name)} рядом` : 'Ты в Яндекс 01';
-      p = s.visit.plan ? `Следующая точка: ${esc(planNext())}` : 'Спроси, чем заняться прямо сейчас — Люмен подскажет по твоим интересам';
-      cta = `<button class="btn red" data-act="y01nav" data-arg="lumen">${I.chat} ${L ? 'Написать' : 'Гулять с Люменом'}</button>`;
+      h2 = L ? `${esc(L.name)} рядом` : 'Вы в Яндекс 01';
+      p = s.visit.plan ? `Следующая точка: ${esc(planNext())}` : 'Спросите, чем заняться прямо сейчас';
+      cta = `<button class="btn sm red" data-act="y01nav" data-arg="lumen">${L ? 'Написать' : 'Гулять с Люменом'}</button>`;
     } else {
-      h2 = 'Первое пространство Яндекса в городе';
-      p = 'Кино, музыка, книги, Фабрика и Люмен, который поведёт по визиту';
-      cta = L ? `<button class="btn red" data-act="lumenPlanHome">${I.sparkle} Спланировать с ${esc(L.name)}</button>` : `<button class="btn red" data-act="y01nav" data-arg="lumen">${I.sparkle} Познакомиться с Люменом</button>`;
+      h2 = 'Пространство, где оживают технологии';
+      p = 'Персональный ИИ-компаньон составит вам компанию во время посещения пространства';
+      cta = L ? `<button class="btn sm red" data-act="lumenPlanHome">Спланировать с ${esc(L.name)}</button>` : `<button class="btn sm red" data-act="y01nav" data-arg="lumen">Разбудить своего Люмена</button>`;
     }
     const evs = ['robots', 'workshop', 'listen', 'author', 'premiere', 'expo'].map((k) => D.events[k]);
     $('#y01 [data-screen="today"]').innerHTML = `
       <div class="t-hero">
-        <div class="status">${inside ? `<span class="here-chip"><i class="live-dot"></i> Ты в Я01 · ${s.clock.time}</span>` : `<span class="here-chip">${I.pin.replace('class="ic"', 'class="ic" style="width:14px;height:14px"')} Галерея «Чкалов»</span>`}</div>
-        <h2>${h2}</h2><p>${p}</p>${cta}
-        <span class="hero-lumen">${L ? A.lumen(L.id, 120, { idle: true, sparks: true }) : ''}</span>
+        <i class="t-cat"></i>
+        <div class="t-text">${inside ? `<span class="here-chip"><i class="live-dot"></i> Вы в Я01 · ${s.clock.time}</span>` : ''}<h2>${h2}</h2><p>${p}</p>${cta}</div>
       </div>
+      <div class="sec-title">Управление пространством</div>
+      <div class="residents">
+        <button class="res" data-act="openMeidzi"><span class="res-ic meidzi-ic">${Meidzi.logo(30)}</span><span>Meidzi</span></button>
+        <button class="res" data-act="openSmysl"><span class="res-ic" style="background:#1F3A2C">${Smysl.logo(60)}</span><span>Смысловая 226</span></button>
+        ${[['Ф', 'Фабрика', '#0f2a24'], ['К', 'Кинопоиск', '#ff5500'], ['М', 'М.Кос', '#2a0f1a'], ['П', 'Свои Плюсы', '#3b1690']].map(([g, n, c]) => `<button class="res soon" data-act="toast" data-arg="Мини-апп «${n}» — в следующих итерациях"><span class="res-ic" style="background:${c}">${g}</span><span>${n}</span></button>`).join('')}
+      </div>
+      ${Guides.section()}
       <div class="sec-title">${day} в Я01</div>
       <div class="ev-list">${evs.map((e) => eventRow(e)).join('')}</div>
       <div class="sec-title">Только для Плюса ${A.plusMark(20)}</div>
@@ -113,7 +122,7 @@
     const tickets = v.regs.map((id) => D.events[id]).filter(Boolean);
     const hasAny = v.plan || v.log.length || tickets.length || v.coffee;
     if (!hasAny) {
-      el.innerHTML = `<div class="empty">${L ? A.lumen(L.id, 96, { idle: true }) : UI.orb(64)}<p>Здесь будет твой визит: план, билеты, кофе и история того, что было.</p><button class="btn" data-act="y01nav" data-arg="lumen">${L ? `Спланировать с ${esc(L.name)}` : 'Начать с Люменом'}</button></div>`;
+      el.innerHTML = `<div class="empty">${L ? A.lumen(L.id, 96, { idle: true }) : '<img class="cat-empty" src="assets/cats/sleep.jpg" alt="">'}<p>Здесь будет ваш визит: план, билеты, кофе и история того, что было.</p><button class="btn" data-act="y01nav" data-arg="lumen">${L ? `Спланировать с ${esc(L.name)}` : 'Начать с Люменом'}</button></div><div class="sub-title">Редакционные путеводители</div><div class="gscroll">${Guides.GUIDES.map((g) => Guides.cover(g)).join('')}</div><div class="gexpo">${Guides.cover(Guides.EXPO, 'wide')}</div>`;
       return;
     }
     const wallet = [];
@@ -124,7 +133,8 @@
       ${wallet.length ? `<div class="sec-title">Билеты и коды</div><div class="wallet">${wallet.join('')}</div>` : ''}
       ${v.log.length ? `<div class="sec-title">История визита</div><div class="log">${v.log.map((l) => `<div><span class="t">${l.t}</span>${I[l.icon] || I.flag}<span>${esc(l.text)}</span></div>`).join('')}</div>` : ''}
       ${s.memory.length ? `<div class="sec-title">Что ${L ? esc(L.name) : 'Люмен'} запомнил ${I.eye}</div><div class="mem">${s.memory.map((m, i) => `<div><span>${esc(m)}</span><button data-act="forget" data-arg="${i}">${I.trash}</button></div>`).join('')}</div>
-      <p class="mem-note">Ты видишь всё, что Люмен знает о тебе из Яндекс 01, и можешь удалить любой пункт. Магазины и партнёры не получают эти данные.</p>` : ''}
+      <p class="mem-note">Вы видите всё, что Люмен знает о вас из Яндекс 01, и можете удалить любой пункт. Магазины и партнёры не получают эти данные.</p>` : ''}
+      <div class="sub-title">Редакционные путеводители</div><div class="gscroll">${Guides.GUIDES.map((g) => Guides.cover(g)).join('')}</div><div class="gexpo">${Guides.cover(Guides.EXPO, 'wide')}</div>
       <div style="height:20px"></div>`;
   }
 
@@ -176,20 +186,20 @@
     const e = D.events[id];
     UI.sheet(`<div class="sheet-h">${esc(e.title)}</div><p class="sheet-p">${e.date || 'Суббота, 28 ноября'} · ${e.time}${e.end ? `–${e.end}` : ''} · ${esc(e.place)}, ${e.floor} этаж</p>
       <div style="display:flex;justify-content:center;margin:6px 0 16px">${A.qr('ev' + e.id, 220)}</div>
-      <p class="sheet-p" style="text-align:center">Покажи код на входе — мы его отсканируем</p>
+      <p class="sheet-p" style="text-align:center">Покажите код на входе — мы его отсканируем</p>
       <button class="btn block" data-act="ics" data-arg="${e.id}">${I.calendar} Добавить в календарь</button>`);
   };
   acts.openVoucher = () => {
     const v = S.get().visit.coffee; if (!v) return;
     const d = D.drinks.find((x) => x.id === v.drink);
-    UI.sheet(`<div class="sheet-h">${esc(d.name)}</div><p class="sheet-p">${esc(d.place)} · ${v.status === 'ready' ? 'готов, забери на стойке' : 'готовится'}</p>
+    UI.sheet(`<div class="sheet-h">${esc(d.name)}</div><p class="sheet-p">${esc(d.place)} · ${v.status === 'ready' ? 'готов, можно забирать на стойке' : 'готовится'}</p>
       <div style="display:flex;justify-content:center;margin:6px 0 16px">${A.qr('coffee' + v.drink, 220)}</div>
       <button class="btn block ghost" data-act="coffeeTaken">${I.check} Забрал</button>`);
   };
   acts.coffeeTaken = () => { S.set((s) => { if (s.visit.coffee) s.visit.coffee.status = 'taken'; }); S.log('Забрал кофе', 'coffee'); UI.closeSheet(); render(); Lumen.refreshCards(); };
   acts.ics = (id) => {
     const e = D.events[id];
-    const date = e.date ? '2026-12-05' : '2026-11-28';
+    const date = e.iso || (e.date ? '2026-12-05' : '2026-11-28');
     UI.ics({ title: e.title, date, start: e.time, end: e.end || e.time, place: `${e.place}, ${e.floor} этаж`, desc: e.note });
     UI.toast('Календарь откроет событие');
   };

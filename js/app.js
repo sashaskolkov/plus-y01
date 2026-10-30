@@ -43,6 +43,8 @@
     const linked = handleLink();
     renderAll();
     Lumen.boot();
+    Meidzi.boot();
+    Smysl.boot();
     if (!S.get().welcomed && !linked) Demo.welcome();
     else if (linked && S.get().beats && !S.get().beats.home && !S.get().beats.arrive) setTimeout(() => Demo.runBeat('home'), 600);
     Demo.render();

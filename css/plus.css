@@ -183,3 +183,15 @@
 .book-cont.recpin { box-shadow: inset 0 0 0 1.5px rgba(193,120,253,.6); }
 .rec-note { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--y-violet); margin-bottom: 6px; }
 .rec-note .lumen { flex: none; }
+
+/* Я01 как четвёртый сервис на Главной */
+.y01-mood { width: 112px; height: 112px; border-radius: 22px; padding: 10px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 4px;
+  background: radial-gradient(120% 90% at 100% 0%, rgba(254,76,4,.95), rgba(250,74,180,.55) 45%, rgba(126,51,255,.45) 80%), #1a0f2e; box-shadow: 0 10px 30px rgba(254,76,4,.25); }
+.y01-mood b { font-family: var(--display); font-size: 13.5px; line-height: 1.08; margin-top: auto; position: relative; }
+.y01-mood small { font-size: 10px; color: rgba(255,255,255,.8); position: relative; }
+.mcard:nth-child(4) { top: 222px; transform: rotate(-3deg); }
+/* Таб Я01 */
+.tab01 { width: 30px; height: 26px; display: flex; align-items: center; justify-content: center; gap: 1.5px; }
+.tab01 i { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.tab01 i.r { background: var(--y-red); }
+.tab { font-size: 10px; }
