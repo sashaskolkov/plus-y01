@@ -68,7 +68,7 @@
           why: 'Попросите ИИ дорисовать фон к вашему селфи — получится открытка из будущего.' },
         { zone: 'afisha', floor: 4, kind: 'look', title: 'Выставка «Открытки из будущего»', where: 'Выставки Афиши · 4 этаж',
           story: 'Для выставки строили отдельный коридор-машину времени: от советского НИИ до капсулы 60-х. Внутри работы художников, которые учат ИИ быть соавтором.',
-          why: 'Для неё есть подробный гид.', action: { label: 'Открыть гид по выставке', act: 'openGuide', arg: 'expo' } },
+          why: 'Для неё есть подробный гид.', action: { label: 'Открыть гид по выставке', act: 'openTour', arg: 'expo' } },
         { zone: 's7', floor: 4, kind: 'look', title: 'Двигатель, который заносили через фасад', where: 'S7 · 4 этаж',
           story: 'Двигатель настоящий, он отработал на крыле тысячи часов. На четвёртый этаж его поднимали ночью краном через снятый фрагмент фасада, и монтажники сутки рассчитывали, выдержит ли перекрытие. Иллюминаторы по стенам — из настоящего авиационного акрила.',
           why: 'Встаньте сзади двигателя: лопатки расставлены так, что сквозь них видно небо в иллюминаторе.' },
@@ -213,7 +213,7 @@
 
   // ---------- Карточки для «Сегодня» ----------
   function cover(g, cls = '') {
-    return `<button class="gcard ${cls} ${g.expo ? 'expo' : ''}" data-act="openGuide" data-arg="${g.id}" style="--g1:${g.g[0]};--g2:${g.g[1]}">
+    return `<button class="gcard ${cls} ${g.expo ? 'expo' : ''}" data-act="openTour" data-arg="${g.id}" style="--g1:${g.g[0]};--g2:${g.g[1]}">
       <span class="gc-glyph">${esc(g.glyph)}</span>
       <span class="gc-top">${g.expo ? 'Гид по выставке' : 'Путеводитель'} · ${g.stops.length} ${g.stops.length < 5 ? 'остановки' : 'остановок'}</span>
       <b>${esc(g.expo ? g.short : g.title)}</b><small>${esc(g.time)}</small></button>`;
@@ -282,7 +282,7 @@
   function rerender() { const el = $('#y01 .guide-view'); if (el && el.classList.contains('open')) render(el, byId(el.dataset.id)); }
   function close() { const el = $('#y01 .guide-view'); if (el) el.classList.remove('open'); }
 
-  acts.openGuide = (id) => open(id);
+  acts.openTour = (id) => open(id);
   acts.closeGuide = () => close();
   acts.guideFloor = (f) => { floorSel = Number(f); rerender(); };
   acts.guideDone = (i) => {

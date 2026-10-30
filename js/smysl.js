@@ -52,13 +52,13 @@
   }
   function renderNew() {
     const inCart = (id) => st().books.some((x) => x.id === id);
-    return `<div class="sm-hero"><div><small>Ноябрь</small><h2>Новинки месяца</h2><p>Подписали, на какой полке стоит каждая книга, и показали рейтинг читателей Яндекс Книг. Можно купить заранее — соберём и упакуем, пока вы гуляете.</p></div></div>
+    return `<div class="sm-hero"><div><small>Ноябрь</small><h2>Новинки месяца</h2><p>Подписали, на какой полке стоит каждая книга, и показали рейтинг читателей Яндекс Книг. Можно купить и упаковать прямо отсюда — соберём, пока вы гуляете.</p></div></div>
       <div class="sm-books">${BOOKS.map((b) => `<div class="sm-book">
         <button class="sm-cover" data-act="smBook" data-arg="${b.id}">${A.bookCover(b)}</button>
         <div class="sm-binfo"><small>${esc(b.genre)}</small><b data-act="smBook" data-arg="${b.id}">${esc(b.title)}</b><span class="sm-author">${esc(b.author)}</span>
           <div class="sm-meta">${stars(b.rating)}<span class="sm-votes">${b.votes} оценок</span></div>
           <button class="sm-shelf" data-act="smShelf" data-arg="${b.id}">${I.pin}${esc(shelfText(b))}</button>
-          <div class="sm-buy"><span>${rub(b.price)}</span><button class="btn sm ${inCart(b.id) ? 'ghost' : 'sm-green'}" data-act="smAddBook" data-arg="${b.id}">${inCart(b.id) ? `${I.check} В заказе` : 'Купить заранее'}</button></div>
+          <div class="sm-buy"><span>${rub(b.price)}</span><button class="btn sm ${inCart(b.id) ? 'ghost' : 'sm-green'}" data-act="smAddBook" data-arg="${b.id}">${inCart(b.id) ? `${I.check} В заказе` : 'Купить и упаковать'}</button></div>
         </div></div>`).join('')}</div>`;
   }
   function renderEvents() {
@@ -76,7 +76,7 @@
   function cartBar() {
     const t = st().tab;
     if (t === 'cafe' && st().cafe.length) { const n = st().cafe.reduce((a, c) => a + c.qty, 0); const sum = st().cafe.reduce((a, c) => a + c.qty * c.price, 0); return `<button class="mz-cartbar sm-bar" data-act="smCheckout" data-arg="cafe"><span class="mz-cnt">${n}</span><span>Заказать в «Лицее»</span><b>${rub(sum)}</b></button>`; }
-    if (t === 'new' && st().books.length) { const n = st().books.length; const sum = st().books.reduce((a, c) => a + c.price, 0); return `<button class="mz-cartbar sm-bar" data-act="smCheckout" data-arg="books"><span class="mz-cnt">${n}</span><span>Купить заранее</span><b>${rub(sum)}</b></button>`; }
+    if (t === 'new' && st().books.length) { const n = st().books.length; const sum = st().books.reduce((a, c) => a + c.price, 0); return `<button class="mz-cartbar sm-bar" data-act="smCheckout" data-arg="books"><span class="mz-cnt">${n}</span><span>Купить и упаковать</span><b>${rub(sum)}</b></button>`; }
     return '';
   }
 
@@ -91,7 +91,7 @@
     UI.sheet(`<div class="mz-sheet sm-sheet"><div class="sm-bk-top">${A.bookCover(b, 'big')}<div><small>${esc(b.genre)}</small><div class="sheet-h">${esc(b.title)}</div><p class="sheet-p" style="margin:0 0 8px">${esc(b.author)}</p>${stars(b.rating)} <span class="sm-votes">${b.votes} оценок в Яндекс Книгах</span></div></div>
       ${b.note ? `<p class="sm-note">${esc(b.note)}</p>` : ''}
       <div class="sm-where"><b>${I.pin} ${esc(shelfText(b))}</b>${shelfMap(b)}</div>
-      <div class="mz-addrow"><button class="btn block mz-btn sm-green" data-act="smAddBook" data-arg="${b.id}">Купить заранее · ${rub(b.price)}</button></div>
+      <div class="mz-addrow"><button class="btn block mz-btn sm-green" data-act="smAddBook" data-arg="${b.id}">Купить и упаковать · ${rub(b.price)}</button></div>
       <button class="btn block ghost sm-later" data-act="toast" data-arg="Добавили в «Хочу прочитать» в Яндекс Книгах">В «Хочу прочитать»</button></div>`, { cls: 'light' });
   };
   acts.smShelf = (id) => acts.smBook(id);
@@ -117,7 +117,7 @@
     const usePts = !!st().usePoints && s.user.hasPlus && s.points > 0;
     const pts = usePts ? Math.min(s.points, total) : 0;
     UI.sheet(`<div class="mz-sheet">
-      <div class="sheet-h">${kind === 'books' ? 'Купить заранее' : 'Заказ в «Лицее»'}</div>
+      <div class="sheet-h">${kind === 'books' ? 'Купить и упаковать' : 'Заказ в «Лицее»'}</div>
       <div class="mz-lines">${items.map((c, i) => `<div>${kind === 'books' ? A.bookCover(book(c.id), 'line') : ''}<span>${c.qty > 1 ? `${c.qty} × ` : ''}${esc(c.name)}${kind === 'books' ? `<small>${esc(shelfText(book(c.id)))}</small>` : ''}</span><b>${rub(c.qty * c.price)}</b><button data-act="smDel" data-arg="${kind}|${i}">${I.close}</button></div>`).join('')}</div>
       ${kind === 'books' ? `<button class="sm-check ${st().wrap ? 'on' : ''}" data-act="smWrap"><i>${I.check}</i><span>Упаковать в подарок<small>Крафт, лента и закладка Смысловой · ${s.user.hasPlus ? 'бесплатно с Плюсом' : '150 ₽'}</small></span></button>` : ''}
       <div class="mz-when">${I.clock}<div><b>${kind === 'books' ? 'Соберём за 15 минут' : 'Приготовим к вашему приходу'}</b><small>${kind === 'books' ? 'Пришлём пуш, когда всё будет готово. Заберёте на кассе Смысловой 226 — назовите номер заказа' : 'Стойка «Лицея» в конце этажа слева, у панорамных окон'}</small></div></div>
