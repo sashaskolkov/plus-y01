@@ -107,7 +107,8 @@
       <div class="residents">
         <button class="res" data-act="openMeidzi"><span class="res-ic meidzi-ic">${Meidzi.logo(30)}</span><span>Meidzi</span></button>
         <button class="res" data-act="openSmysl"><span class="res-ic" style="background:#1F3A2C">${Smysl.logo(60)}</span><span>Смысловая 226</span></button>
-        ${[['Ф', 'Фабрика', '#0f2a24'], ['К', 'Кинопоиск', '#ff5500'], ['М', 'М.Кос', '#2a0f1a'], ['П', 'Свои Плюсы', '#3b1690']].map(([g, n, c]) => `<button class="res soon" data-act="toast" data-arg="Мини-апп «${n}» — в следующих итерациях"><span class="res-ic" style="background:${c}">${g}</span><span>${n}</span></button>`).join('')}
+        <button class="res" data-act="openFabrika"><span class="res-ic" style="background:none">${Fabrika.logo(60)}</span><span>Фабрика</span></button>
+        ${[['К', 'Кинопоиск', '#ff5500'], ['М', 'М.Кос', '#2a0f1a'], ['П', 'Свои Плюсы', '#3b1690']].map(([g, n, c]) => `<button class="res soon" data-act="toast" data-arg="Мини-апп «${n}» — в следующих итерациях"><span class="res-ic" style="background:${c}">${g}</span><span>${n}</span></button>`).join('')}
       </div>
       ${Guides.section()}
       ${agendaHTML()}

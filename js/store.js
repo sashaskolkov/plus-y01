@@ -33,6 +33,7 @@
       nowPlaying: { title: 'Лето', artist: 'Давай', g: ['#2A2A2A', '#7A7A7A'], playing: false },
       bookPinned: null,
       meidzi: { cart: [], order: null, n: 46 },
+      fab: { tab: 'scan', cart: [], scanned: 0, orders: [], n: 1201, lastVisit: '12 октября' },
       smysl: { tab: 'new', books: [], cafe: [], wrap: true, orders: [], n: 311 },
       tab: 'home',
       y01: { open: false, screen: 'today', floor: 3 },
